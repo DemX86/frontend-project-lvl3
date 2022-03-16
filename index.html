@@ -15,19 +15,24 @@
         <form class="row g-2">
           <div class="col text-body">
             <div class="form-floating">
-              <input type="url" class="form-control" id="url" placeholder="Ссылка на RSS" autofocus
-                     required autocomplete="off">
+              <input id="url" type="text" class="form-control" name="url"
+                     placeholder="Ссылка на RSS" autofocus required autocomplete="off">
               <label for="url">Ссылка на RSS</label>
+              <div class="invalid-feedback"></div>
             </div>
           </div>
           <div class="col-auto">
-            <button type="submit" class="h-100 btn btn-lg btn-primary px-sm-4">Добавить</button>
+            <button type="submit" class="btn btn-lg btn-primary px-sm-4">Добавить</button>
           </div>
           <div class="form-text">Пример: https://ru.hexlet.io/lessons.rss</div>
         </form>
       </div>
     </div>
   </div>
+</div>
+
+<div id="list" class="row">
+
 </div>
 
 </body>
