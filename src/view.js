@@ -1,4 +1,9 @@
-const renderForm = (state) => {
+const renderForm = (i18, state) => {
+  const textElements = document.querySelectorAll('[data-text]');
+  textElements.forEach((el) => {
+    el.textContent = i18.t(el.dataset.text); // eslint-disable-line no-param-reassign
+  });
+
   const form = document.querySelector('form');
   const input = form.querySelector('#url');
   const feedback = form.querySelector('.invalid-feedback');

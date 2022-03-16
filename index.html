@@ -10,21 +10,21 @@
   <div class="container p-4 text-light">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <h1 class="mb-0">RSS агрегатор</h1>
-        <p class="fs-5">Начните читать RSS сегодня!</p>
+        <h1 class="mb-0" data-text="header"></h1>
+        <p class="fs-5" data-text="motto"></p>
         <form class="row g-2">
           <div class="col text-body">
             <div class="form-floating">
               <input id="url" type="text" class="form-control" name="url"
-                     placeholder="Ссылка на RSS" autofocus required autocomplete="off">
-              <label for="url">Ссылка на RSS</label>
+                     placeholder="RSS Link" autofocus required autocomplete="off">
+              <label for="url" data-text="label"></label>
               <div class="invalid-feedback"></div>
             </div>
           </div>
           <div class="col-auto">
-            <button type="submit" class="btn btn-lg btn-primary px-sm-4">Добавить</button>
+            <button type="submit" class="btn btn-lg btn-primary px-sm-4" data-text="button"></button>
           </div>
-          <div class="form-text">Пример: https://ru.hexlet.io/lessons.rss</div>
+          <div class="form-text" data-text="example"></div>
         </form>
       </div>
     </div>
@@ -33,6 +33,14 @@
 
 <div id="list" class="row">
 
+</div>
+
+<div id="lng-selector" class="btn-group" role="group" aria-label="Language selector">
+  <input type="radio" class="btn-check" name="btn-radio" id="lng-ru" data-lng="ru" autocomplete="off" checked>
+  <label class="btn btn-sm btn-outline-primary" for="lng-ru">RU</label>
+
+  <input type="radio" class="btn-check" name="btn-radio" id="lng-en" data-lng="en" autocomplete="off">
+  <label class="btn btn-sm btn-outline-primary" for="lng-en">EN</label>
 </div>
 
 </body>
