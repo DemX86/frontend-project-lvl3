@@ -26,10 +26,3 @@ jobs:
       run: make install
     - name: Run linter
       run: make lint
-    - name: Run tests and publish coverage on Code Climate
-      uses: paambaati/codeclimate-action@v3.0.0
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-      with:
-        coverageCommand: make test-coverage
-        debug: true
