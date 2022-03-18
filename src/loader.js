@@ -40,7 +40,10 @@ const loadFeed = (e, i18, ax, watchedState) => {
         title: feedData.title,
         desc: feedData.desc,
       };
-      const posts = feedData.items.map((post) => ({ feedId, ...post }));
+      const posts = feedData.items.map((post, index) => {
+        const postId = watchedState.posts.length + index + 1;
+        return { postId, feedId, ...post };
+      });
       watchedState.feedUrls.push(feedUrl);
       watchedState.feeds.push(feed);
       watchedState.posts.push(...posts);

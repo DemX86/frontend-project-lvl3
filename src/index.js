@@ -17,7 +17,6 @@ const app = () => {
     lng: defaultLanguage,
     resources,
   });
-  // todo что делать с ненужным возвращаемым промисом?
 
   const ax = axios.create();
 
@@ -37,7 +36,7 @@ const app = () => {
     // console.log(JSON.stringify(state, null, 2)); // todo remove
 
     if (path === 'ui.form.state') {
-      renderForm(i18, state);
+      renderForm(i18, state.ui.form);
     } else if (path === 'feeds') {
       renderFeeds(i18, state.feeds);
     } else if (path === 'posts') {
@@ -45,7 +44,7 @@ const app = () => {
     } else if (path === 'lng') {
       i18.changeLanguage(value)
         .then(() => {
-          renderForm(i18, state);
+          renderForm(i18, state.ui.form);
         });
     }
   });
@@ -61,7 +60,7 @@ const app = () => {
     watchedState.lng = e.target.dataset.lng;
   });
 
-  renderForm(i18, state);
+  renderForm(i18, state.ui.form);
 };
 
 app();

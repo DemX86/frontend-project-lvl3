@@ -1,4 +1,4 @@
-const renderForm = (i18, state) => {
+const renderForm = (i18, formState) => {
   const textElements = document.querySelectorAll('[data-text]');
   textElements.forEach((el) => {
     el.textContent = i18.t(el.dataset.text);
@@ -10,7 +10,7 @@ const renderForm = (i18, state) => {
   const button = form.querySelector('button');
   const spinner = document.querySelector('#spinner');
 
-  switch (state.ui.form.state) {
+  switch (formState.state) {
     case 'ready': {
       input.classList.remove('is-invalid');
       feedback.textContent = '';
@@ -27,13 +27,13 @@ const renderForm = (i18, state) => {
     }
     case 'error': {
       input.classList.add('is-invalid');
-      feedback.textContent = state.ui.form.error;
+      feedback.textContent = formState.error;
       button.disabled = false;
       spinner.classList.add('d-none');
       break;
     }
     default:
-      throw new Error(`Untracked UI state: ${state.ui.form.state}`);
+      throw new Error(`Untracked UI state: ${formState.state}`);
   }
 };
 
