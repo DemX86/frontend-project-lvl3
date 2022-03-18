@@ -15,14 +15,15 @@
         <form class="row g-2">
           <div class="col text-body">
             <div class="form-floating">
-              <input id="url" type="text" class="form-control" name="url"
+              <input id="feed-url" type="text" class="form-control" name="feed-url"
                      placeholder="RSS Link" autofocus required autocomplete="off">
-              <label for="url" data-text="label"></label>
+              <label for="feed-url" data-text="label"></label>
               <div class="invalid-feedback"></div>
             </div>
           </div>
           <div class="col-auto">
-            <button type="submit" class="btn btn-lg btn-primary px-sm-4" data-text="button"></button>
+            <button type="submit" class="btn btn-lg btn-primary px-sm-4"
+                    data-text="button"></button>
           </div>
           <div class="form-text" data-text="example"></div>
         </form>
@@ -31,16 +32,30 @@
   </div>
 </div>
 
-<div id="list" class="row">
+<div id="feeds-and-posts" class="container p-5">
+  <div class="row">
+    <div id="feeds" class="col-4">
+    </div>
 
+    <div id="posts" class="col-8">
+    </div>
+  </div>
 </div>
 
 <div id="lng-selector" class="btn-group" role="group" aria-label="Language selector">
-  <input type="radio" class="btn-check" name="btn-radio" id="lng-ru" data-lng="ru" autocomplete="off" checked>
+  <input type="radio" class="btn-check" name="btn-radio" id="lng-ru" data-lng="ru"
+         autocomplete="off" checked>
   <label class="btn btn-sm btn-outline-primary" for="lng-ru">RU</label>
 
-  <input type="radio" class="btn-check" name="btn-radio" id="lng-en" data-lng="en" autocomplete="off">
+  <input type="radio" class="btn-check" name="btn-radio" id="lng-en" data-lng="en"
+         autocomplete="off">
   <label class="btn btn-sm btn-outline-primary" for="lng-en">EN</label>
+</div>
+
+<div id="spinner" class="position-absolute top-50 start-50 translate-middle d-none">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
 </div>
 
 </body>

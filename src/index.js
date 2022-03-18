@@ -1,32 +1,31 @@
+import axios from 'axios';
 import i18next from 'i18next';
 import onChange from 'on-change';
-import { string } from 'yup';
 
-import { renderForm, renderList } from './view';
 import resources from './locales/index';
+import loadFeed from './loader';
+import { renderFeeds, renderForm, renderPosts } from './view';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './style.css';
-
-const validateUrl = (url) => {
-  const schema = string().url();
-  return schema.validate(url);
-};
+import './css/style.css';
 
 const app = () => {
   const defaultLanguage = 'ru';
-  // const defaultLanguage = 'en';
 
   const i18 = i18next.createInstance();
   i18.init({
     lng: defaultLanguage,
     resources,
   });
-  // todo что делать с возвращаемым промисом?
+  // todo что делать с ненужным возвращаемым промисом?
+
+  const ax = axios.create();
 
   const state = {
     lng: defaultLanguage,
-    urls: [],
+    feeds: [],
+    posts: [],
+    feedUrls: [],
     ui: {
       form: {
         state: 'ready',
@@ -39,8 +38,10 @@ const app = () => {
 
     if (path === 'ui.form.state') {
       renderForm(i18, state);
-    } else if (path === 'urls') {
-      renderList(state.urls);
+    } else if (path === 'feeds') {
+      renderFeeds(i18, state.feeds);
+    } else if (path === 'posts') {
+      renderPosts(i18, state.posts);
     } else if (path === 'lng') {
       i18.changeLanguage(value)
         .then(() => {
@@ -51,25 +52,7 @@ const app = () => {
 
   const form = document.querySelector('form');
   form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    const url = data.get('url').trim();
-    watchedState.ui.form.state = 'validating';
-    validateUrl(url)
-      .then(() => {
-        if (watchedState.urls.includes(url)) {
-          watchedState.ui.form.error = i18.t('errors.duplicateUrl');
-          watchedState.ui.form.state = 'error';
-          return;
-        }
-        watchedState.urls.push(url);
-        watchedState.ui.form.error = null;
-        watchedState.ui.form.state = 'ready';
-      })
-      .catch(() => {
-        watchedState.ui.form.error = i18.t('errors.invalidUrl');
-        watchedState.ui.form.state = 'error';
-      });
+    loadFeed(e, i18, ax, watchedState);
   });
 
   const lngSelector = document.querySelector('#lng-selector');

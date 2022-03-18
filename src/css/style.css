@@ -1,0 +1,13 @@
+form button {
+    height: 58px;
+}
+
+#feeds-and-posts {
+    max-width: 1200px;
+}
+
+#lng-selector {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+}
