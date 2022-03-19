@@ -35,3 +35,4 @@ const updateFeedsBg = (i18, ax, watchedState) => {
 };
 
 export default updateFeedsBg;
+// todo обновлять все адреса асинхронно
