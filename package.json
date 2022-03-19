@@ -2,6 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "Hexlet Level 3 Project",
+  "main": "src/index.js",
   "scripts": {
     "test": "jest",
     "watch": "webpack --watch",
