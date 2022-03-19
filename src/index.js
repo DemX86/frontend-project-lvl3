@@ -8,8 +8,8 @@ import updateFeedsBg from './updater.js';
 import { renderFeeds, renderForm, renderPosts } from './view.js';
 
 import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/style.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import './css/style.css';
 
 const app = () => {
   const defaultLanguage = 'ru';
