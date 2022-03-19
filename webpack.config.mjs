@@ -1,12 +1,11 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
 
-module.exports = {
+const module = {
   entry: './src/index.js',
   output: {
-    // filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve('dist'),
     clean: true,
   },
   mode: process.env.NODE_ENV || 'development',
@@ -28,3 +27,5 @@ module.exports = {
     new MiniCssExtractPlugin(),
   ],
 };
+
+export default module;
