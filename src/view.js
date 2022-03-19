@@ -15,7 +15,7 @@ const renderForm = (i18, formState) => {
       input.classList.remove('is-invalid');
       feedback.classList.remove('text-success', 'text-danger');
       feedback.textContent = '';
-      form.reset();
+      input.value = '';
       input.focus();
       button.disabled = false;
       spinner.classList.add('d-none');
@@ -40,7 +40,7 @@ const renderForm = (i18, formState) => {
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.textContent = i18.t('form.success');
-      form.reset();
+      input.value = '';
       input.focus();
       button.disabled = false;
       spinner.classList.add('d-none');

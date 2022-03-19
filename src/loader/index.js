@@ -42,7 +42,6 @@ const loadFeed = (event, i18, ax, watchedState) => {
   event.preventDefault();
   const data = new FormData(event.target);
   const feedUrl = data.get('feed-url').trim();
-  console.log('LOAD URL:', feedUrl);
   watchedState.ui.form.state = 'processing';
   validateUrl(i18, watchedState, feedUrl)
     .then(() => downloadXml(i18, ax, feedUrl))
