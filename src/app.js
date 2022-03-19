@@ -7,6 +7,7 @@ import loadFeed from './loader/index.js';
 import { renderFeeds, renderForm, renderPosts } from './view.js';
 
 import 'bootstrap';
+import updateFeedsBg from './updater.js';
 
 const app = () => {
   const defaultLanguage = 'ru';
@@ -58,6 +59,8 @@ const app = () => {
   });
 
   renderForm(i18, state.ui.form);
+
+  updateFeedsBg(i18, ax, watchedState);
 };
 
 export default app;

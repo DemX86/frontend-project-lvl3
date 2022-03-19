@@ -1,8 +1,6 @@
 import { string } from 'yup';
 import downloadXml from './downloader.js';
 import parseXml from './parser.js';
-import updateFeedsBg from '../updater.js';
-import UPDATE_INTERVAL from './const.js';
 
 const validateUrl = (i18, watchedState, rawUrl) => {
   if (rawUrl === '') {
@@ -44,6 +42,7 @@ const loadFeed = (event, i18, ax, watchedState) => {
   event.preventDefault();
   const data = new FormData(event.target);
   const feedUrl = data.get('feed-url').trim();
+  console.log('LOAD URL:', feedUrl);
   watchedState.ui.form.state = 'processing';
   validateUrl(i18, watchedState, feedUrl)
     .then(() => downloadXml(i18, ax, feedUrl))
@@ -52,7 +51,6 @@ const loadFeed = (event, i18, ax, watchedState) => {
     .then(() => {
       watchedState.ui.form.error = null;
       watchedState.ui.form.state = 'success';
-      // setTimeout(updateFeedsBg, UPDATE_INTERVAL, i18, ax, watchedState);
     })
     .catch((error) => {
       watchedState.ui.form.error = error.message;

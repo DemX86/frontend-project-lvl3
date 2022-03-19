@@ -1,3 +1,0 @@
-const UPDATE_INTERVAL = 5000;
-
-export default UPDATE_INTERVAL;

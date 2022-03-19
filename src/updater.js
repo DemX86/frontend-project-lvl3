@@ -1,6 +1,7 @@
 import downloadXml from './loader/downloader.js';
 import parseXml from './loader/parser.js';
-import UPDATE_INTERVAL from './loader/const.js';
+
+const UPDATE_INTERVAL = 5000;
 
 const updateFeed = (watchedState, savedFeed, newFeedData) => {
   const savedFeedPostLinks = watchedState.posts
