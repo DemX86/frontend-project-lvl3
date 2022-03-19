@@ -6,9 +6,9 @@ const downloadXml = (i18, ax, url) => {
   const proxiedUrl = generateProxiedUrl(url);
   return ax.get(proxiedUrl)
     .then((rs) => {
-      // if (rs.data.status.error) {
-      //   return Promise.reject(Error(i18.t('form.errors.failedLoading')));
-      // }
+      if (rs.statusText !== 'OK') {
+        return Promise.reject(Error(i18.t('form.errors.failedLoading')));
+      }
       return rs.data.contents;
     });
 };
