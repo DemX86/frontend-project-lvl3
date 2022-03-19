@@ -15,6 +15,7 @@ const parseXml = (i18, content) => {
   const items = [...doc.querySelectorAll('item')]
     .map((item) => ({
       title: getElementText(item, 'title'),
+      desc: getElementText(item, 'description'),
       link: getElementText(item, 'link'),
     }));
   const rs = {

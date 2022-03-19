@@ -1,5 +1,5 @@
-import { downloadXml } from './loader';
-import parseXml from './parser';
+import downloadXml from './loader/downloader';
+import parseXml from './loader/parser';
 
 const UPDATE_INTERVAL = 5000;
 
@@ -10,9 +10,9 @@ const updateFeed = (watchedState, savedFeed, newFeedData) => {
   const newPosts = newFeedData.items
     .filter((post) => !savedFeedPostLinks.includes(post.link))
     .map((post, index) => {
-      const postId = watchedState.posts.length + index + 1;
+      const postId = watchedState.posts.length + index;
       return {
-        postId,
+        id: postId,
         feedId: savedFeed.id,
         ...post,
       };

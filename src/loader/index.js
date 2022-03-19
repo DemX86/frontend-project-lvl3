@@ -1,13 +1,9 @@
 import { string } from 'yup';
+import downloadXml from './downloader';
 import parseXml from './parser';
 
-const PROXY_URL = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
-
-const generateProxiedUrl = (url) => `${PROXY_URL}${encodeURIComponent(url)}`;
-
 const validateUrl = (i18, watchedState, rawUrl) => {
-  const schema = string()
-    .url();
+  const schema = string().url();
   return schema.validate(rawUrl)
     .catch(() => {
       throw new Error(i18.t('errors.invalidFeedUrl'));
@@ -21,19 +17,8 @@ const validateUrl = (i18, watchedState, rawUrl) => {
     });
 };
 
-const downloadXml = (i18, ax, url) => {
-  const proxiedUrl = generateProxiedUrl(url);
-  return ax.get(proxiedUrl)
-    .then((rs) => {
-      if (rs.data.status.error) {
-        throw new Error(i18.t('errors.failedLoading'));
-      }
-      return rs.data.contents;
-    });
-};
-
 const saveFeed = (watchedState, feedUrl, feedData) => {
-  const feedId = watchedState.feeds.length + 1;
+  const feedId = watchedState.feeds.length;
   const feed = {
     id: feedId,
     url: feedUrl,
@@ -41,9 +26,9 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
     desc: feedData.desc,
   };
   const posts = feedData.items.map((post, index) => {
-    const postId = watchedState.posts.length + index + 1;
+    const postId = watchedState.posts.length + index;
     return {
-      postId,
+      id: postId,
       feedId,
       ...post,
     };
@@ -72,4 +57,3 @@ const loadFeed = (event, i18, ax, watchedState) => {
 };
 
 export default loadFeed;
-export { downloadXml };

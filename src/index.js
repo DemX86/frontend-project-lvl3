@@ -7,6 +7,7 @@ import loadFeed from './loader';
 import updateFeedsBg from './updater';
 import { renderFeeds, renderForm, renderPosts } from './view';
 
+import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/style.css';
 
@@ -25,6 +26,7 @@ const app = () => {
     lng: defaultLanguage,
     feeds: [],
     posts: [],
+    postsRead: [],
     ui: {
       form: {
         state: 'ready',
@@ -40,7 +42,7 @@ const app = () => {
     } else if (path === 'feeds') {
       renderFeeds(i18, state.feeds);
     } else if (path === 'posts') {
-      renderPosts(i18, state.posts);
+      renderPosts(i18, state.posts, state.postsRead);
     } else if (path === 'lng') {
       i18.changeLanguage(value)
         .then(() => {
