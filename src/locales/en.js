@@ -6,6 +6,14 @@ export default {
       label: 'RSS Link',
       button: 'Add',
       example: 'For instance: https://ru.hexlet.io/lessons.rss',
+      success: 'RSS loaded successfully',
+      errors: {
+        emptyUrl: 'Should be not empty',
+        invalidFeedUrl: 'URL must be valid',
+        duplicateFeedUrl: 'RSS exists already',
+        failedLoading: 'Network error',
+        invalidFeedXml: 'Invalid RSS structure',
+      },
     },
     feedsColumn: 'Feeds',
     postsColumn: 'Posts',
@@ -13,12 +21,6 @@ export default {
     modal: {
       read: 'Read Full Post',
       close: 'Close',
-    },
-    errors: {
-      invalidFeedUrl: 'Invalid URL',
-      duplicateFeedUrl: 'This URL was added already',
-      failedLoading: 'Loading error: check the URL is correct or try again later',
-      invalidFeedXml: 'Invalid RSS XML structure',
     },
   },
 };

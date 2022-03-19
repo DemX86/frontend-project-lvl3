@@ -8,7 +8,7 @@ const parseXml = (i18, content) => {
   const doc = parser.parseFromString(content, 'text/xml');
   const error = doc.querySelector('parsererror');
   if (error) {
-    throw new Error(i18.t('errors.invalidFeedXml'));
+    return Promise.reject(Error(i18.t('form.errors.invalidFeedXml')));
   }
   const title = getElementText(doc, 'channel title');
   const desc = getElementText(doc, 'channel description');

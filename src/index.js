@@ -29,14 +29,12 @@ const app = () => {
     postsRead: [],
     ui: {
       form: {
-        state: 'ready',
+        state: 'start',
         error: null,
       },
     },
   };
   const watchedState = onChange(state, (path, value) => {
-    // console.log(JSON.stringify(state, null, 2)); // todo remove
-
     if (path === 'ui.form.state') {
       renderForm(i18, state.ui.form);
     } else if (path === 'feeds') {
@@ -58,7 +56,7 @@ const app = () => {
 
   const lngSelector = document.querySelector('#lng-selector');
   lngSelector.addEventListener('click', (event) => {
-    watchedState.ui.form.state = 'ready';
+    watchedState.ui.form.state = 'start';
     watchedState.lng = event.target.dataset.lng;
   });
 

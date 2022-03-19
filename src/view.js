@@ -6,13 +6,14 @@ const renderForm = (i18, formState) => {
 
   const form = document.querySelector('form');
   const input = form.querySelector('#feed-url');
-  const feedback = form.querySelector('.invalid-feedback');
   const button = form.querySelector('button');
+  const feedback = document.querySelector('#feedback');
   const spinner = document.querySelector('#spinner');
 
   switch (formState.state) {
-    case 'ready': {
+    case 'start': {
       input.classList.remove('is-invalid');
+      feedback.classList.remove('text-success', 'text-danger');
       feedback.textContent = '';
       form.reset();
       input.focus();
@@ -27,7 +28,20 @@ const renderForm = (i18, formState) => {
     }
     case 'error': {
       input.classList.add('is-invalid');
+      feedback.classList.remove('text-success');
+      feedback.classList.add('text-danger');
       feedback.textContent = formState.error;
+      button.disabled = false;
+      spinner.classList.add('d-none');
+      break;
+    }
+    case 'success': {
+      input.classList.remove('is-invalid');
+      feedback.classList.remove('text-danger');
+      feedback.classList.add('text-success');
+      feedback.textContent = i18.t('form.success');
+      form.reset();
+      input.focus();
       button.disabled = false;
       spinner.classList.add('d-none');
       break;

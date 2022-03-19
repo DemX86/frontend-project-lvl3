@@ -9,7 +9,7 @@
 <div class="container-fluid bg-dark">
   <div class="container p-4 text-light">
     <div class="row justify-content-center">
-      <div class="col-md-8">
+      <div class="col-md-8 mb-2">
         <h1 class="mb-0" data-text="header"></h1>
         <p class="fs-5" data-text="motto"></p>
         <form class="row g-2">
@@ -18,15 +18,15 @@
               <input id="feed-url" type="text" class="form-control" name="feed-url"
                      placeholder="RSS Link" autofocus required autocomplete="off">
               <label for="feed-url" data-text="form.label"></label>
-              <div class="invalid-feedback"></div>
             </div>
           </div>
           <div class="col-auto">
             <button type="submit" class="btn btn-lg btn-primary px-sm-4"
                     data-text="form.button"></button>
           </div>
-          <div class="form-text" data-text="form.example"></div>
         </form>
+        <div class="form-text mt-2" data-text="form.example"></div>
+        <div id="feedback" class="position-absolute small"></div>
       </div>
     </div>
   </div>

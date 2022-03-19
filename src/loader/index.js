@@ -3,15 +3,18 @@ import downloadXml from './downloader';
 import parseXml from './parser';
 
 const validateUrl = (i18, watchedState, rawUrl) => {
+  if (rawUrl === '') {
+    return Promise.reject(Error(i18.t('form.errors.emptyUrl')));
+  }
   const schema = string().url();
   return schema.validate(rawUrl)
     .catch(() => {
-      throw new Error(i18.t('errors.invalidFeedUrl'));
+      return Promise.reject(Error(i18.t('form.errors.invalidFeedUrl')));
     })
     .then((cleanUrl) => {
       const feedUrls = watchedState.feeds.map((feed) => feed.url);
       if (feedUrls.includes(cleanUrl)) {
-        throw new Error(i18.t('errors.duplicateFeedUrl'));
+        return Promise.reject(Error(i18.t('form.errors.duplicateFeedUrl')));
       }
       return cleanUrl;
     });
@@ -48,7 +51,7 @@ const loadFeed = (event, i18, ax, watchedState) => {
     .then((feedData) => saveFeed(watchedState, feedUrl, feedData))
     .then(() => {
       watchedState.ui.form.error = null;
-      watchedState.ui.form.state = 'ready';
+      watchedState.ui.form.state = 'success';
     })
     .catch((error) => {
       watchedState.ui.form.error = error.message;
