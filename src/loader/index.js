@@ -8,9 +8,7 @@ const validateUrl = (i18, watchedState, rawUrl) => {
   }
   const schema = string().url();
   return schema.validate(rawUrl)
-    .catch(() => {
-      return Promise.reject(Error(i18.t('form.errors.invalidFeedUrl')));
-    })
+    .catch(() => Promise.reject(Error(i18.t('form.errors.invalidFeedUrl'))))
     .then((cleanUrl) => {
       const feedUrls = watchedState.feeds.map((feed) => feed.url);
       if (feedUrls.includes(cleanUrl)) {
