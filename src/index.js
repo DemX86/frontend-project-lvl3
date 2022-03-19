@@ -4,6 +4,7 @@ import onChange from 'on-change';
 
 import resources from './locales/index';
 import loadFeed from './loader';
+import updateFeedsBg from './updater';
 import { renderFeeds, renderForm, renderPosts } from './view';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,7 +25,6 @@ const app = () => {
     lng: defaultLanguage,
     feeds: [],
     posts: [],
-    feedUrls: [],
     ui: {
       form: {
         state: 'ready',
@@ -50,17 +50,19 @@ const app = () => {
   });
 
   const form = document.querySelector('form');
-  form.addEventListener('submit', (e) => {
-    loadFeed(e, i18, ax, watchedState);
+  form.addEventListener('submit', (event) => {
+    loadFeed(event, i18, ax, watchedState);
   });
 
   const lngSelector = document.querySelector('#lng-selector');
-  lngSelector.addEventListener('click', (e) => {
+  lngSelector.addEventListener('click', (event) => {
     watchedState.ui.form.state = 'ready';
-    watchedState.lng = e.target.dataset.lng;
+    watchedState.lng = event.target.dataset.lng;
   });
 
   renderForm(i18, state.ui.form);
+
+  updateFeedsBg(i18, ax, watchedState);
 };
 
 app();
