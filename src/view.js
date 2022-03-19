@@ -16,6 +16,7 @@ const renderForm = (i18, formState) => {
       feedback.classList.remove('text-success', 'text-danger');
       feedback.textContent = '';
       input.value = '';
+      input.removeAttribute('readonly');
       input.focus();
       button.disabled = false;
       spinner.classList.add('d-none');
@@ -23,6 +24,7 @@ const renderForm = (i18, formState) => {
     }
     case 'processing': {
       button.disabled = true;
+      input.setAttribute('readonly', 'true');
       spinner.classList.remove('d-none');
       break;
     }
@@ -31,6 +33,7 @@ const renderForm = (i18, formState) => {
       feedback.classList.remove('text-success');
       feedback.classList.add('text-danger');
       feedback.textContent = formState.error;
+      input.removeAttribute('readonly');
       button.disabled = false;
       spinner.classList.add('d-none');
       break;
@@ -41,6 +44,7 @@ const renderForm = (i18, formState) => {
       feedback.classList.add('text-success');
       feedback.textContent = i18.t('form.success');
       input.value = '';
+      input.removeAttribute('readonly');
       input.focus();
       button.disabled = false;
       spinner.classList.add('d-none');
