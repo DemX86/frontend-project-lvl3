@@ -15,14 +15,14 @@
         <form class="row g-2">
           <div class="col text-body">
             <div class="form-floating">
-              <input id="feed-url" type="text" class="form-control" name="url"
-                     placeholder="RSS Link" role="textbox" autofocus required autocomplete="off">
+              <input id="feed-url" type="text" class="form-control" name="feed-url"
+                     placeholder="RSS Link" role="textbox" aria-label="url" autofocus required autocomplete="off">
               <label for="feed-url" data-text="form.label"></label>
             </div>
           </div>
           <div class="col-auto">
             <button type="submit" class="btn btn-lg btn-primary h-100 px-sm-4"
-                    data-text="form.button"></button>
+                    data-text="form.button" aria-label="add"></button>
           </div>
         </form>
         <div class="form-text mt-2" data-text="form.example"></div>

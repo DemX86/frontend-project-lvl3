@@ -41,7 +41,7 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
 const loadFeed = (event, i18, ax, watchedState) => {
   event.preventDefault();
   const data = new FormData(event.target);
-  const feedUrl = data.get('url').trim();
+  const feedUrl = data.get('feed-url').trim();
   watchedState.ui.form.state = 'processing';
   validateUrl(i18, watchedState, feedUrl)
     .then((url) => downloadXml(i18, ax, url))
