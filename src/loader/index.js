@@ -52,7 +52,7 @@ const loadFeed = (event, i18, ax, watchedState) => {
     .then(() => {
       watchedState.ui.form.error = null;
       watchedState.ui.form.state = 'success';
-      setTimeout(updateFeedsBg, UPDATE_INTERVAL, i18, ax, watchedState);
+      // setTimeout(updateFeedsBg, UPDATE_INTERVAL, i18, ax, watchedState);
     })
     .catch((error) => {
       watchedState.ui.form.error = error.message;
