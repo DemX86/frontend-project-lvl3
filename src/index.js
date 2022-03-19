@@ -2,10 +2,10 @@ import axios from 'axios';
 import i18next from 'i18next';
 import onChange from 'on-change';
 
-import resources from './locales/index';
-import loadFeed from './loader';
-import updateFeedsBg from './updater';
-import { renderFeeds, renderForm, renderPosts } from './view';
+import resources from './locales/index.js';
+import loadFeed from './loader/index.js';
+import updateFeedsBg from './updater.js';
+import { renderFeeds, renderForm, renderPosts } from './view.js';
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';

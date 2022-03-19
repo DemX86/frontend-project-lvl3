@@ -1,8 +1,7 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
 
-const module = {
+export default {
   entry: './src/index.js',
   output: {
     path: path.resolve('dist'),
@@ -16,7 +15,7 @@ const module = {
     rules: [
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
@@ -24,8 +23,5 @@ const module = {
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
-    new MiniCssExtractPlugin(),
   ],
 };
-
-export default module;

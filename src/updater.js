@@ -1,5 +1,5 @@
-import downloadXml from './loader/downloader';
-import parseXml from './loader/parser';
+import downloadXml from './loader/downloader.js';
+import parseXml from './loader/parser.js';
 
 const UPDATE_INTERVAL = 5000;
 

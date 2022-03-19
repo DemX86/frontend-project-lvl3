@@ -1,6 +1,6 @@
 import { string } from 'yup';
-import downloadXml from './downloader';
-import parseXml from './parser';
+import downloadXml from './downloader.js';
+import parseXml from './parser.js';
 
 const validateUrl = (i18, watchedState, rawUrl) => {
   if (rawUrl === '') {
