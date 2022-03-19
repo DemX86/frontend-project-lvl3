@@ -1,6 +1,8 @@
 import { string } from 'yup';
 import downloadXml from './downloader.js';
 import parseXml from './parser.js';
+import updateFeedsBg from '../updater.js';
+import UPDATE_INTERVAL from './const.js';
 
 const validateUrl = (i18, watchedState, rawUrl) => {
   if (rawUrl === '') {
@@ -44,12 +46,13 @@ const loadFeed = (event, i18, ax, watchedState) => {
   const feedUrl = data.get('feed-url').trim();
   watchedState.ui.form.state = 'processing';
   validateUrl(i18, watchedState, feedUrl)
-    .then((url) => downloadXml(i18, ax, url))
+    .then(() => downloadXml(i18, ax, feedUrl))
     .then((content) => parseXml(i18, content))
     .then((feedData) => saveFeed(watchedState, feedUrl, feedData))
     .then(() => {
       watchedState.ui.form.error = null;
       watchedState.ui.form.state = 'success';
+      setTimeout(updateFeedsBg, UPDATE_INTERVAL, i18, ax, watchedState);
     })
     .catch((error) => {
       watchedState.ui.form.error = error.message;

@@ -4,7 +4,6 @@ import onChange from 'on-change';
 
 import resources from './locales/index.js';
 import loadFeed from './loader/index.js';
-import updateFeedsBg from './updater.js';
 import { renderFeeds, renderForm, renderPosts } from './view.js';
 
 import 'bootstrap';
@@ -59,8 +58,6 @@ const app = () => {
   });
 
   renderForm(i18, state.ui.form);
-
-  updateFeedsBg(i18, ax, watchedState);
 };
 
 export default app;
