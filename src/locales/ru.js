@@ -11,7 +11,7 @@ export default {
         emptyUrl: 'Не должно быть пустым',
         invalidFeedUrl: 'Ссылка должна быть валидным URL',
         duplicateFeedUrl: 'RSS уже существует',
-        failedLoading: 'Ошибка сети',
+        networkError: 'Ошибка сети',
         invalidFeedXml: 'Ресурс не содержит валидный RSS',
       },
     },

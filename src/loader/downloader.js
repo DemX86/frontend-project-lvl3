@@ -5,12 +5,8 @@ const generateProxiedUrl = (url) => `${PROXY_URL}${encodeURIComponent(url)}`;
 const downloadXml = (i18, ax, url) => {
   const proxiedUrl = generateProxiedUrl(url);
   return ax.get(proxiedUrl)
-    .then((rs) => {
-      if (rs.data.status && rs.data.status.error) {
-        return Promise.reject(Error(i18.t('form.errors.failedLoading')));
-      }
-      return rs.data.contents;
-    });
+    .then((rs) => rs.data.contents)
+    .catch(() => Promise.reject(Error(i18.t('form.errors.networkError'))));
 };
 
 export default downloadXml;

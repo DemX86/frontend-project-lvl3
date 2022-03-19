@@ -11,7 +11,7 @@ export default {
         emptyUrl: 'Should be not empty',
         invalidFeedUrl: 'URL must be valid',
         duplicateFeedUrl: 'RSS exists already',
-        failedLoading: 'Network error',
+        networkError: 'Network error',
         invalidFeedXml: 'Invalid RSS structure',
       },
     },
