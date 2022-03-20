@@ -3,7 +3,7 @@ import parseXml from './loader/parser.js';
 
 const UPDATE_INTERVAL = 5000;
 
-const updateFeed = (watchedState, savedFeed, newFeedData) => {
+const updateSavedFeed = (watchedState, savedFeed, newFeedData) => {
   const savedFeedPostLinks = watchedState.posts
     .filter((post) => post.feedId === savedFeed.id)
     .map((post) => post.link);
@@ -23,16 +23,18 @@ const updateFeed = (watchedState, savedFeed, newFeedData) => {
 };
 
 const updateFeedsBg = (i18, ax, watchedState) => {
-  watchedState.feeds.forEach((feed) => {
+  const updateFeed = (feed) => {
     downloadXml(i18, ax, feed.url)
       .then((content) => parseXml(i18, content))
-      .then((feedData) => updateFeed(watchedState, feed, feedData))
-      .catch((error) => {
-        console.log(error); // eslint-disable-line no-console
-      });
-  });
+      .then((feedData) => updateSavedFeed(watchedState, feed, feedData));
+  };
+
+  Promise.all(watchedState.feeds.map(updateFeed))
+    .catch((error) => {
+      console.log(error); // eslint-disable-line no-console
+    });
+
   setTimeout(updateFeedsBg, UPDATE_INTERVAL, i18, ax, watchedState);
 };
 
 export default updateFeedsBg;
-// todo обновлять все адреса асинхронно
