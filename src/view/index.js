@@ -32,7 +32,7 @@ const renderForm = (i18, formState) => {
       input.classList.add('is-invalid');
       feedback.classList.remove('text-success');
       feedback.classList.add('text-danger');
-      feedback.textContent = formState.error;
+      feedback.textContent = i18.t(`form.errors.${formState.error}`);
       input.removeAttribute('readonly');
       button.disabled = false;
       spinner.classList.add('d-none');

@@ -1,4 +1,4 @@
-const parseXml = (i18, content) => {
+const parseXml = (content) => {
   const getElementText = (doc, tag) => {
     const element = doc.querySelector(tag);
     return element.textContent;
@@ -6,9 +6,11 @@ const parseXml = (i18, content) => {
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/xml');
-  const error = doc.querySelector('parsererror');
-  if (error) {
-    return Promise.reject(Error(i18.t('form.errors.invalidFeedXml')));
+  const errorElement = doc.querySelector('parsererror');
+  if (errorElement) {
+    const error = new Error();
+    error.type = 'invalidFeedXml';
+    return Promise.reject(error);
   }
   const title = getElementText(doc, 'channel title');
   const desc = getElementText(doc, 'channel description');

@@ -2,17 +2,26 @@ import { string } from 'yup';
 import downloadXml from './downloader.js';
 import parseXml from './parser.js';
 
-const validateUrl = (i18, watchedState, rawUrl) => {
+const validateUrl = (watchedState, rawUrl) => {
   if (rawUrl === '') {
-    return Promise.reject(Error(i18.t('form.errors.emptyUrl')));
+    const error = new Error();
+    error.type = 'emptyUrl';
+    return Promise.reject(error);
   }
-  const schema = string().url();
+  const schema = string()
+    .url();
   return schema.validate(rawUrl)
-    .catch(() => Promise.reject(Error(i18.t('form.errors.invalidFeedUrl'))))
+    .catch(() => {
+      const error = new Error();
+      error.type = 'invalidFeedUrl';
+      return Promise.reject(error);
+    })
     .then((cleanUrl) => {
       const feedUrls = watchedState.feeds.map((feed) => feed.url);
       if (feedUrls.includes(cleanUrl)) {
-        return Promise.reject(Error(i18.t('form.errors.duplicateFeedUrl')));
+        const error = new Error();
+        error.type = 'duplicateFeedUrl';
+        return Promise.reject(error);
       }
       return cleanUrl;
     });
@@ -38,21 +47,22 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
   watchedState.posts.push(...posts);
 };
 
-const loadFeed = (event, i18, ax, watchedState) => {
+const loadFeed = (event, ax, watchedState) => {
   event.preventDefault();
   const data = new FormData(event.target);
-  const feedUrl = data.get('feed-url').trim();
+  const feedUrl = data.get('feed-url')
+    .trim();
   watchedState.ui.form.state = 'processing';
-  validateUrl(i18, watchedState, feedUrl)
-    .then(() => downloadXml(i18, ax, feedUrl))
-    .then((content) => parseXml(i18, content))
+  validateUrl(watchedState, feedUrl)
+    .then(() => downloadXml(ax, feedUrl))
+    .then((content) => parseXml(content))
     .then((feedData) => saveFeed(watchedState, feedUrl, feedData))
     .then(() => {
       watchedState.ui.form.error = null;
       watchedState.ui.form.state = 'success';
     })
     .catch((error) => {
-      watchedState.ui.form.error = error.message;
+      watchedState.ui.form.error = error.type;
       watchedState.ui.form.state = 'error';
     });
 };

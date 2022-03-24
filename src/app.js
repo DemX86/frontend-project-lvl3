@@ -70,7 +70,7 @@ const app = () => {
 
   const form = document.querySelector('form');
   form.addEventListener('submit', (event) => {
-    controller.loadFeed(event, i18, ax, watchedState);
+    controller.loadFeed(event, ax, watchedState);
   });
 
   const postsContainer = document.querySelector('#posts');
@@ -83,7 +83,7 @@ const app = () => {
     controller.changeLanguage(event, watchedState);
   });
 
-  controller.updateFeedsBg(i18, ax, watchedState);
+  controller.updateFeedsBg(ax, watchedState);
 
   view.renderForm(i18, state.ui.form);
 };
