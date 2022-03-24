@@ -22,9 +22,9 @@ const updateSavedFeed = (watchedState, savedFeed, newFeedData) => {
   }
 };
 
-const updateFeedsBg = (ax, watchedState) => {
+const updateFeedsBg = (watchedState) => {
   const updateFeed = (feed) => {
-    downloadXml(ax, feed.url)
+    downloadXml(feed.url)
       .then((content) => parseXml(content))
       .then((feedData) => updateSavedFeed(watchedState, feed, feedData));
   };
@@ -34,7 +34,7 @@ const updateFeedsBg = (ax, watchedState) => {
       console.log(error); // eslint-disable-line no-console
     });
 
-  setTimeout(updateFeedsBg, UPDATE_INTERVAL, ax, watchedState);
+  setTimeout(updateFeedsBg, UPDATE_INTERVAL, watchedState);
 };
 
 export default updateFeedsBg;

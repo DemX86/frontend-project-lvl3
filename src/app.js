@@ -1,6 +1,5 @@
 import 'bootstrap';
 
-import axios from 'axios';
 import i18next from 'i18next';
 import onChange from 'on-change';
 
@@ -16,8 +15,6 @@ const app = () => {
     lng: defaultLanguage,
     resources,
   });
-
-  const ax = axios.create();
 
   const state = {
     lng: defaultLanguage,
@@ -70,7 +67,7 @@ const app = () => {
 
   const form = document.querySelector('form');
   form.addEventListener('submit', (event) => {
-    controller.loadFeed(event, ax, watchedState);
+    controller.loadFeed(event, watchedState);
   });
 
   const postsContainer = document.querySelector('#posts');
@@ -83,7 +80,7 @@ const app = () => {
     controller.changeLanguage(event, watchedState);
   });
 
-  controller.updateFeedsBg(ax, watchedState);
+  controller.updateFeedsBg(watchedState);
 
   view.renderForm(i18, state.ui.form);
 };

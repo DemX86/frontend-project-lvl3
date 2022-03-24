@@ -1,4 +1,5 @@
 import { string } from 'yup';
+
 import downloadXml from './downloader.js';
 import parseXml from './parser.js';
 
@@ -47,14 +48,14 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
   watchedState.posts.push(...posts);
 };
 
-const loadFeed = (event, ax, watchedState) => {
+const loadFeed = (event, watchedState) => {
   event.preventDefault();
   const data = new FormData(event.target);
   const feedUrl = data.get('feed-url')
     .trim();
   watchedState.ui.form.state = 'processing';
   validateUrl(watchedState, feedUrl)
-    .then(() => downloadXml(ax, feedUrl))
+    .then(() => downloadXml(feedUrl))
     .then((content) => parseXml(content))
     .then((feedData) => saveFeed(watchedState, feedUrl, feedData))
     .then(() => {
