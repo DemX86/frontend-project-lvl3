@@ -88,27 +88,7 @@ const renderFeeds = (i18, feeds) => {
   container.replaceChildren(card);
 };
 
-const renderPosts = (i18, posts, postsRead) => {
-  const markLinkAsVisited = (a) => {
-    a.classList.replace('fw-bold', 'fw-normal');
-    a.classList.add('link-secondary');
-  };
-
-  const prepareModal = (modal, post) => {
-    const modalTitle = modal.querySelector('#modal-title');
-    const modalBody = modal.querySelector('#modal-body');
-    const modalRead = modal.querySelector('#modal-read');
-    const modalClose = modal.querySelector('#modal-close');
-
-    modalTitle.textContent = post.title;
-    const p = document.createElement('p');
-    p.textContent = post.desc;
-    modalBody.replaceChildren(p);
-    modalRead.textContent = i18.t('modal.read');
-    modalRead.href = post.link;
-    modalClose.textContent = i18.t('modal.close');
-  };
-
+const renderPosts = (i18, posts) => {
   const container = document.querySelector('#posts');
 
   const card = document.createElement('div');
@@ -123,22 +103,14 @@ const renderPosts = (i18, posts, postsRead) => {
   postsList.classList.add('list-group', 'list-group-flush');
   posts.forEach((post) => {
     const li = document.createElement('li');
-    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'py-2');
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'py-2');
 
     const a = document.createElement('a');
-    a.classList.add('m-0');
-    if (postsRead.includes(post.id)) {
-      a.classList.add('fw-normal', 'link-secondary');
-    } else {
-      a.classList.add('fw-bold');
-    }
+    a.classList.add('m-0', 'fw-bold');
     a.href = post.link;
     a.target = '_blank';
     a.textContent = post.title;
-    a.addEventListener('click', () => {
-      markLinkAsVisited(a);
-      postsRead.push(post.id);
-    });
+    a.dataset.postId = post.id;
 
     const button = document.createElement('button');
     button.type = 'button';
@@ -147,12 +119,7 @@ const renderPosts = (i18, posts, postsRead) => {
     button.dataset.text = 'viewPostButton';
     button.dataset.bsToggle = 'modal';
     button.dataset.bsTarget = '#modal';
-    button.addEventListener('click', () => {
-      const modal = document.querySelector('#modal');
-      prepareModal(modal, post);
-      markLinkAsVisited(a);
-      postsRead.push(post.id);
-    });
+    button.dataset.postId = post.id;
 
     li.append(a, button);
     postsList.append(li);
@@ -162,4 +129,38 @@ const renderPosts = (i18, posts, postsRead) => {
   container.replaceChildren(card);
 };
 
-export { renderForm, renderFeeds, renderPosts };
+const markReadPosts = (postsRead) => {
+  const postsContainer = document.querySelector('#posts');
+  postsRead.forEach((postId) => {
+    const a = postsContainer.querySelector(`[data-post-id="${postId}"]`);
+    a.classList.remove('fw-bold');
+    a.classList.add('fw-normal', 'link-secondary');
+  });
+};
+
+const prepareModal = (i18, state) => {
+  const postId = state.ui.modal.loadedPostId;
+  const post = state.posts[postId];
+
+  const modal = document.querySelector('#modal');
+  const modalTitle = modal.querySelector('#modal-title');
+  const modalBody = modal.querySelector('#modal-body');
+  const modalRead = modal.querySelector('#modal-read');
+  const modalClose = modal.querySelector('#modal-close');
+
+  modalTitle.textContent = post.title;
+  const p = document.createElement('p');
+  p.textContent = post.desc;
+  modalBody.replaceChildren(p);
+  modalRead.textContent = i18.t('modal.read');
+  modalRead.href = post.link;
+  modalClose.textContent = i18.t('modal.close');
+};
+
+export {
+  renderForm,
+  renderFeeds,
+  renderPosts,
+  markReadPosts,
+  prepareModal,
+};
