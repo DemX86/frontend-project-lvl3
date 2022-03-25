@@ -20,7 +20,7 @@ const app = () => {
     lng: defaultLanguage,
     feeds: [],
     posts: [],
-    postsRead: [],
+    postReadIds: [],
     ui: {
       form: {
         state: 'start',
@@ -46,11 +46,11 @@ const app = () => {
       }
       case 'posts': {
         view.renderPosts(i18, state.posts);
-        view.markReadPosts(state.postsRead);
+        view.markReadPosts(state.postReadIds);
         break;
       }
-      case 'postsRead': {
-        view.markReadPosts(state.postsRead);
+      case 'postReadIds': {
+        view.markReadPosts(state.postReadIds);
         break;
       }
       case 'ui.form.state': {

@@ -8,7 +8,7 @@ const changeLanguage = (event, watchedState) => {
 
 const handlePostActions = (event, watchedState) => {
   const postId = Number(event.target.dataset.postId);
-  watchedState.postsRead.push(postId);
+  watchedState.postReadIds.push(postId);
 
   if (event.target.tagName === 'BUTTON') {
     watchedState.ui.modal.loadedPostId = postId;

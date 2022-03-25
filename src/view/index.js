@@ -129,9 +129,9 @@ const renderPosts = (i18, posts) => {
   container.replaceChildren(card);
 };
 
-const markReadPosts = (postsRead) => {
+const markReadPosts = (postReadIds) => {
   const postsContainer = document.querySelector('#posts');
-  postsRead.forEach((postId) => {
+  postReadIds.forEach((postId) => {
     const a = postsContainer.querySelector(`[data-post-id="${postId}"]`);
     a.classList.remove('fw-bold');
     a.classList.add('fw-normal', 'link-secondary');
