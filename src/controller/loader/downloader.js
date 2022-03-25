@@ -1,14 +1,16 @@
 import axios from 'axios';
 
-const ax = axios.create();
-
-const PROXY_URL = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
-
-const generateProxiedUrl = (url) => new URL(`${PROXY_URL}${encodeURIComponent(url)}`);
+const generateProxiedUrl = (url) => {
+  const proxyUrl = 'https://allorigins.hexlet.app/get';
+  const proxiedUrl = new URL(proxyUrl);
+  proxiedUrl.searchParams.set('disableCache', 'true');
+  proxiedUrl.searchParams.set('url', url);
+  return proxiedUrl;
+};
 
 const downloadXml = (url) => {
   const proxiedUrl = generateProxiedUrl(url);
-  return ax.get(proxiedUrl)
+  return axios.get(proxiedUrl.href)
     .then((rs) => rs.data.contents)
     .catch(() => {
       const error = new Error();
