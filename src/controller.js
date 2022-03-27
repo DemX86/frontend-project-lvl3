@@ -167,4 +167,9 @@ const handlePostActions = (event, watchedState) => {
   }
 };
 
-export { changeLanguage, handlePostActions, loadFeed, updateFeedsBg };
+export {
+  changeLanguage,
+  handlePostActions,
+  loadFeed,
+  updateFeedsBg,
+};

@@ -4,8 +4,18 @@ import i18next from 'i18next';
 import onChange from 'on-change';
 
 import resources from './locales/index.js';
-import { changeLanguage, handlePostActions, loadFeed, updateFeedsBg } from './controller.js';
-import { prepareModal, renderFeeds, renderForm, renderPosts } from './render.js';
+import {
+  changeLanguage,
+  handlePostActions,
+  loadFeed,
+  updateFeedsBg,
+} from './controller.js';
+import {
+  prepareModal,
+  renderFeeds,
+  renderForm,
+  renderPosts,
+} from './render.js';
 
 const app = () => {
   const defaultLanguage = 'ru';
