@@ -12,6 +12,7 @@ export default {
   devServer: {
     static: './dist',
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
