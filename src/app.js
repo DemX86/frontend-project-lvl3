@@ -44,13 +44,9 @@ const app = () => {
             view.renderFeeds(i18, state.feeds);
             break;
           }
-          case 'posts': {
-            view.renderPosts(i18, state.posts);
-            view.markReadPosts(state.postReadIds);
-            break;
-          }
+          case 'posts':
           case 'postReadIds': {
-            view.markReadPosts(state.postReadIds);
+            view.renderPosts(i18, state);
             break;
           }
           case 'ui.form.state': {

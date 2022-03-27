@@ -88,7 +88,7 @@ const renderFeeds = (i18, feeds) => {
   container.replaceChildren(card);
 };
 
-const renderPosts = (i18, posts) => {
+const renderPosts = (i18, state) => {
   const container = document.querySelector('#posts');
 
   const card = document.createElement('div');
@@ -101,12 +101,17 @@ const renderPosts = (i18, posts) => {
 
   const postsList = document.createElement('ul');
   postsList.classList.add('list-group', 'list-group-flush');
-  posts.forEach((post) => {
+  state.posts.forEach((post) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'py-2');
 
     const a = document.createElement('a');
-    a.classList.add('m-0', 'fw-bold');
+    a.classList.add('m-0');
+    if (state.postReadIds.includes(post.id)) {
+      a.classList.add('fw-normal', 'link-secondary');
+    } else {
+      a.classList.add('fw-bold');
+    }
     a.href = post.link;
     a.target = '_blank';
     a.textContent = post.title;
@@ -127,15 +132,6 @@ const renderPosts = (i18, posts) => {
 
   card.append(h4, postsList);
   container.replaceChildren(card);
-};
-
-const markReadPosts = (postReadIds) => {
-  const postsContainer = document.querySelector('#posts');
-  postReadIds.forEach((postId) => {
-    const a = postsContainer.querySelector(`[data-post-id="${postId}"]`);
-    a.classList.remove('fw-bold');
-    a.classList.add('fw-normal', 'link-secondary');
-  });
 };
 
 const prepareModal = (i18, state) => {
@@ -161,6 +157,5 @@ export {
   renderForm,
   renderFeeds,
   renderPosts,
-  markReadPosts,
   prepareModal,
 };
