@@ -136,7 +136,7 @@ const renderPosts = (i18, state) => {
 
 const prepareModal = (i18, state) => {
   const postId = state.ui.modal.loadedPostId;
-  const post = state.posts[postId];
+  const post = state.posts.find((element) => element.id === postId);
 
   const modal = document.querySelector('#modal');
   const modalTitle = modal.querySelector('#modal-title');

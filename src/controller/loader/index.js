@@ -29,7 +29,7 @@ const validateUrl = (watchedState, rawUrl) => {
 };
 
 const saveFeed = (watchedState, feedUrl, feedData) => {
-  const feedId = watchedState.feeds.length;
+  const feedId = watchedState.feeds.length + 1;
   const feed = {
     id: feedId,
     url: feedUrl,
@@ -37,7 +37,7 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
     desc: feedData.desc,
   };
   const posts = feedData.items.map((post, index) => {
-    const postId = watchedState.posts.length + index;
+    const postId = watchedState.posts.length + index + 1;
     return {
       id: postId,
       feedId,

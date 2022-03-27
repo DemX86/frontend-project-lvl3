@@ -10,7 +10,7 @@ const updateSavedFeed = (watchedState, savedFeed, newFeedData) => {
   const newPosts = newFeedData.items
     .filter((post) => !savedFeedPostLinks.includes(post.link))
     .map((post, index) => {
-      const postId = watchedState.posts.length + index;
+      const postId = watchedState.posts.length + index + 1;
       return {
         id: postId,
         feedId: savedFeed.id,
