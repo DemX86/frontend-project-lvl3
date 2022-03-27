@@ -8,7 +8,7 @@ const parseXml = (content) => {
   const doc = parser.parseFromString(content, 'text/xml');
   const errorElement = doc.querySelector('parsererror');
   if (errorElement) {
-    const error = new Error();
+    const error = new Error('Invalid RSS structure');
     error.type = 'invalidFeedXml';
     return Promise.reject(error);
   }

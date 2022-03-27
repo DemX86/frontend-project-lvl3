@@ -13,7 +13,7 @@ const downloadXml = (url) => {
   return axios.get(proxiedUrl.href)
     .then((rs) => rs.data.contents)
     .catch(() => {
-      const error = new Error();
+      const error = new Error('Network error');
       error.type = 'networkError';
       return Promise.reject(error);
     });

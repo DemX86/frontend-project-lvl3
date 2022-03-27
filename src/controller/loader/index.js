@@ -5,7 +5,7 @@ import parseXml from './parser.js';
 
 const validateUrl = (watchedState, rawUrl) => {
   if (rawUrl === '') {
-    const error = new Error();
+    const error = new Error('Should be not empty');
     error.type = 'emptyUrl';
     return Promise.reject(error);
   }
@@ -13,14 +13,14 @@ const validateUrl = (watchedState, rawUrl) => {
     .url();
   return schema.validate(rawUrl)
     .catch(() => {
-      const error = new Error();
+      const error = new Error('URL must be valid');
       error.type = 'invalidFeedUrl';
       return Promise.reject(error);
     })
     .then((cleanUrl) => {
       const feedUrls = watchedState.feeds.map((feed) => feed.url);
       if (feedUrls.includes(cleanUrl)) {
-        const error = new Error();
+        const error = new Error('RSS exists already');
         error.type = 'duplicateFeedUrl';
         return Promise.reject(error);
       }
