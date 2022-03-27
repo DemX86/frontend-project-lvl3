@@ -4,8 +4,8 @@ import i18next from 'i18next';
 import onChange from 'on-change';
 
 import resources from './locales/index.js';
-import * as controller from './controller/index.js';
-import * as view from './view/index.js';
+import { changeLanguage, handlePostActions, loadFeed, updateFeedsBg } from './controller.js';
+import { prepareModal, renderFeeds, renderForm, renderPosts } from './render.js';
 
 const app = () => {
   const defaultLanguage = 'ru';
@@ -36,25 +36,25 @@ const app = () => {
           case 'lng': {
             i18.changeLanguage(value)
               .then(() => {
-                view.renderForm(i18, state.ui.form);
+                renderForm(i18, state.ui.form);
               });
             break;
           }
           case 'feeds': {
-            view.renderFeeds(i18, state.feeds);
+            renderFeeds(i18, state.feeds);
             break;
           }
           case 'posts':
           case 'postReadIds': {
-            view.renderPosts(i18, state);
+            renderPosts(i18, state);
             break;
           }
           case 'ui.form.state': {
-            view.renderForm(i18, state.ui.form);
+            renderForm(i18, state.ui.form);
             break;
           }
           case 'ui.modal.loadedPostId': {
-            view.prepareModal(i18, state);
+            prepareModal(i18, state);
             break;
           }
           // no default
@@ -63,22 +63,22 @@ const app = () => {
 
       const form = document.querySelector('form');
       form.addEventListener('submit', (event) => {
-        controller.loadFeed(event, watchedState);
+        loadFeed(event, watchedState);
       });
 
       const postsContainer = document.querySelector('#posts');
       postsContainer.addEventListener('click', (event) => {
-        controller.handlePostActions(event, watchedState);
+        handlePostActions(event, watchedState);
       });
 
       const lngSelector = document.querySelector('#lng-selector');
       lngSelector.addEventListener('click', (event) => {
-        controller.changeLanguage(event, watchedState);
+        changeLanguage(event, watchedState);
       });
 
-      controller.updateFeedsBg(watchedState);
+      updateFeedsBg(watchedState);
 
-      view.renderForm(i18, state.ui.form);
+      renderForm(i18, state.ui.form);
     });
 };
 

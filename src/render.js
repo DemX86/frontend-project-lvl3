@@ -153,9 +153,4 @@ const prepareModal = (i18, state) => {
   modalClose.textContent = i18.t('modal.close');
 };
 
-export {
-  renderForm,
-  renderFeeds,
-  renderPosts,
-  prepareModal,
-};
+export { renderForm, renderFeeds, renderPosts, prepareModal };
