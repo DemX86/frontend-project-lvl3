@@ -55,6 +55,7 @@ const parseXml = (content) => {
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/xml');
+  // noinspection CssInvalidHtmlTagReference
   const errorElement = doc.querySelector('parsererror');
   if (errorElement) {
     const error = new Error('Invalid RSS structure');
@@ -63,6 +64,7 @@ const parseXml = (content) => {
   }
   const title = getElementText(doc, 'channel title');
   const desc = getElementText(doc, 'channel description');
+  // noinspection CssInvalidHtmlTagReference
   const items = [...doc.querySelectorAll('item')]
     .map((item) => ({
       title: getElementText(item, 'title'),
