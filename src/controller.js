@@ -63,17 +63,17 @@ const parseXml = (content) => {
     return Promise.reject(error);
   }
   const title = getElementText(doc, 'channel title');
-  const desc = getElementText(doc, 'channel description');
+  const description = getElementText(doc, 'channel description');
   // noinspection CssInvalidHtmlTagReference
   const items = [...doc.querySelectorAll('item')]
     .map((item) => ({
       title: getElementText(item, 'title'),
-      desc: getElementText(item, 'description'),
+      description: getElementText(item, 'description'),
       link: getElementText(item, 'link'),
     }));
   const rs = {
     title,
-    desc,
+    description,
     items,
   };
   return Promise.resolve(rs);
@@ -85,7 +85,7 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
     id: feedId,
     url: feedUrl,
     title: feedData.title,
-    desc: feedData.desc,
+    desc: feedData.description,
   };
   const posts = feedData.items.map((post, index) => {
     const postId = watchedState.posts.length + index + 1;

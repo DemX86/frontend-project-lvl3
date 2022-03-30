@@ -78,7 +78,7 @@ const renderFeeds = (i18, feeds) => {
 
     const p = document.createElement('p');
     p.classList.add('m-0', 'small', 'text-secondary');
-    p.textContent = feed.desc;
+    p.textContent = feed.description;
 
     li.append(h6, p);
     feedsList.append(li);
@@ -146,7 +146,7 @@ const prepareModal = (i18, state) => {
 
   modalTitle.textContent = post.title;
   const p = document.createElement('p');
-  p.textContent = post.desc;
+  p.textContent = post.description;
   modalBody.replaceChildren(p);
   modalRead.textContent = i18.t('modal.read');
   modalRead.href = post.link;
