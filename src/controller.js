@@ -148,9 +148,10 @@ const updateFeedsBg = (watchedState) => {
   Promise.all(watchedState.feeds.map(updateFeed))
     .catch((error) => {
       console.log(error); // eslint-disable-line no-console
+    })
+    .finally(() => {
+      setTimeout(updateFeedsBg, UPDATE_INTERVAL, watchedState);
     });
-
-  setTimeout(updateFeedsBg, UPDATE_INTERVAL, watchedState);
 };
 
 const changeLanguage = (event, watchedState) => {
