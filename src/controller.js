@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { string } from 'yup';
-import { uniqueId } from 'lodash';
+import _ from 'lodash';
 
 const POST_ID_PREFIX = 'post_';
 const FEED_ID_PREFIX = 'feed_';
@@ -81,7 +81,7 @@ const parseXml = (content) => {
 };
 
 const saveFeed = (watchedState, feedUrl, feedData) => {
-  const feedId = uniqueId(FEED_ID_PREFIX);
+  const feedId = _.uniqueId(FEED_ID_PREFIX);
   const feed = {
     id: feedId,
     url: feedUrl,
@@ -89,7 +89,7 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
     description: feedData.description,
   };
   const posts = feedData.items.map((post) => ({
-    id: uniqueId(POST_ID_PREFIX),
+    id: _.uniqueId(POST_ID_PREFIX),
     feedId,
     ...post,
   }));
@@ -123,7 +123,7 @@ const updateSavedFeed = (watchedState, savedFeed, newFeedData) => {
   const newPosts = newFeedData.items
     .filter((post) => !savedFeedPostLinks.includes(post.link))
     .map((post) => ({
-      id: uniqueId(POST_ID_PREFIX),
+      id: _.uniqueId(POST_ID_PREFIX),
       feedId: savedFeed.id,
       ...post,
     }));
