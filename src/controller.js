@@ -7,22 +7,21 @@ const validateUrl = (watchedState, rawUrl) => {
   if (rawUrl === '') {
     const error = new Error('Should be not empty');
     error.type = 'emptyUrl';
-    return Promise.reject(error);
+    throw error;
   }
-  const schema = string()
-    .url();
+  const schema = string().url();
   return schema.validate(rawUrl)
     .catch(() => {
       const error = new Error('URL must be valid');
       error.type = 'invalidFeedUrl';
-      return Promise.reject(error);
+      throw error;
     })
     .then((cleanUrl) => {
       const feedUrls = watchedState.feeds.map((feed) => feed.url);
       if (feedUrls.includes(cleanUrl)) {
         const error = new Error('RSS exists already');
         error.type = 'duplicateFeedUrl';
-        return Promise.reject(error);
+        throw error;
       }
       return cleanUrl;
     });
@@ -43,7 +42,7 @@ const downloadXml = (url) => {
     .catch(() => {
       const error = new Error('Network error');
       error.type = 'networkError';
-      return Promise.reject(error);
+      throw error;
     });
 };
 
@@ -60,7 +59,7 @@ const parseXml = (content) => {
   if (errorElement) {
     const error = new Error('Invalid RSS structure');
     error.type = 'invalidFeedXml';
-    return Promise.reject(error);
+    throw error;
   }
   const title = getElementText(doc, 'channel title');
   const description = getElementText(doc, 'channel description');
@@ -71,12 +70,11 @@ const parseXml = (content) => {
       description: getElementText(item, 'description'),
       link: getElementText(item, 'link'),
     }));
-  const rs = {
+  return {
     title,
     description,
     items,
   };
-  return Promise.resolve(rs);
 };
 
 const saveFeed = (watchedState, feedUrl, feedData) => {
@@ -102,8 +100,7 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
 const loadFeed = (event, watchedState) => {
   event.preventDefault();
   const data = new FormData(event.target);
-  const feedUrl = data.get('feed-url')
-    .trim();
+  const feedUrl = data.get('feed-url').trim();
   watchedState.ui.form.state = 'processing';
   validateUrl(watchedState, feedUrl)
     .then(() => downloadXml(feedUrl))
@@ -142,13 +139,14 @@ const updateFeedsBg = (watchedState) => {
   const updateFeed = (feed) => {
     downloadXml(feed.url)
       .then((content) => parseXml(content))
-      .then((feedData) => updateSavedFeed(watchedState, feed, feedData));
+      .then((feedData) => updateSavedFeed(watchedState, feed, feedData))
+      .catch((error) => {
+        watchedState.ui.form.error = error.type;
+        watchedState.ui.form.state = 'error';
+      });
   };
 
   Promise.all(watchedState.feeds.map(updateFeed))
-    .catch((error) => {
-      console.log(error); // eslint-disable-line no-console
-    })
     .finally(() => {
       setTimeout(updateFeedsBg, UPDATE_INTERVAL, watchedState);
     });
