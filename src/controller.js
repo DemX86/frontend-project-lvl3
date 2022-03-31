@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { string } from 'yup';
+import { uniqueId } from 'lodash';
 
+const POST_ID_PREFIX = 'post_';
+const FEED_ID_PREFIX = 'feed_';
 const UPDATE_INTERVAL = 5000;
 
 const validateUrl = (watchedState, rawUrl) => {
@@ -78,21 +81,18 @@ const parseXml = (content) => {
 };
 
 const saveFeed = (watchedState, feedUrl, feedData) => {
-  const feedId = watchedState.feeds.length + 1;
+  const feedId = uniqueId(FEED_ID_PREFIX);
   const feed = {
     id: feedId,
     url: feedUrl,
     title: feedData.title,
     description: feedData.description,
   };
-  const posts = feedData.items.map((post, index) => {
-    const postId = watchedState.posts.length + index + 1;
-    return {
-      id: postId,
-      feedId,
-      ...post,
-    };
-  });
+  const posts = feedData.items.map((post) => ({
+    id: uniqueId(POST_ID_PREFIX),
+    feedId,
+    ...post,
+  }));
   watchedState.feeds.push(feed);
   watchedState.posts.push(...posts);
 };
@@ -122,14 +122,11 @@ const updateSavedFeed = (watchedState, savedFeed, newFeedData) => {
     .map((post) => post.link);
   const newPosts = newFeedData.items
     .filter((post) => !savedFeedPostLinks.includes(post.link))
-    .map((post, index) => {
-      const postId = watchedState.posts.length + index + 1;
-      return {
-        id: postId,
-        feedId: savedFeed.id,
-        ...post,
-      };
-    });
+    .map((post) => ({
+      id: uniqueId(POST_ID_PREFIX),
+      feedId: savedFeed.id,
+      ...post,
+    }));
   if (newPosts.length !== 0) {
     watchedState.posts.push(...newPosts);
   }
@@ -158,7 +155,7 @@ const changeLanguage = (event, watchedState) => {
 };
 
 const handlePostActions = (event, watchedState) => {
-  const postId = Number(event.target.dataset.postId);
+  const { postId } = event.target.dataset;
   watchedState.postReadIds.push(postId);
 
   if (event.target.tagName === 'BUTTON') {
