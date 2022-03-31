@@ -1,7 +1,7 @@
 const renderForm = (i18, formState) => {
   const textElements = document.querySelectorAll('[data-text]');
-  textElements.forEach((el) => {
-    el.textContent = i18.t(el.dataset.text);
+  textElements.forEach((element) => {
+    element.textContent = i18.t(element.dataset.text);
   });
 
   const form = document.querySelector('form');

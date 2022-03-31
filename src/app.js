@@ -8,7 +8,7 @@ import {
   changeLanguage,
   handlePostActions,
   loadFeed,
-  updateFeedsBg,
+  updateFeeds,
 } from './controller.js';
 import {
   prepareModal,
@@ -27,7 +27,7 @@ const app = () => {
   })
     .then(() => {
       const state = {
-        lng: defaultLanguage,
+        language: defaultLanguage,
         feeds: [],
         posts: [],
         postReadIds: [],
@@ -43,7 +43,7 @@ const app = () => {
       };
       const watchedState = onChange(state, (path, value) => {
         switch (path) {
-          case 'lng': {
+          case 'language': {
             i18.changeLanguage(value)
               .then(() => {
                 renderForm(i18, state.ui.form);
@@ -81,12 +81,12 @@ const app = () => {
         handlePostActions(event, watchedState);
       });
 
-      const lngSelector = document.querySelector('#lng-selector');
-      lngSelector.addEventListener('click', (event) => {
+      const languageSelector = document.querySelector('#language-selector');
+      languageSelector.addEventListener('click', (event) => {
         changeLanguage(event, watchedState);
       });
 
-      updateFeedsBg(watchedState);
+      updateFeeds(watchedState);
 
       renderForm(i18, state.ui.form);
     });

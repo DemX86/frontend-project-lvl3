@@ -38,7 +38,7 @@ const generateProxiedUrl = (url) => {
 const downloadXml = (url) => {
   const proxiedUrl = generateProxiedUrl(url);
   return axios.get(proxiedUrl.href)
-    .then((rs) => rs.data.contents)
+    .then((response) => response.data.contents)
     .catch(() => {
       const error = new Error('Network error');
       error.type = 'networkError';
@@ -135,7 +135,7 @@ const updateSavedFeed = (watchedState, savedFeed, newFeedData) => {
   }
 };
 
-const updateFeedsBg = (watchedState) => {
+const updateFeeds = (watchedState) => {
   const updateFeed = (feed) => {
     downloadXml(feed.url)
       .then((content) => parseXml(content))
@@ -148,13 +148,13 @@ const updateFeedsBg = (watchedState) => {
 
   Promise.all(watchedState.feeds.map(updateFeed))
     .finally(() => {
-      setTimeout(updateFeedsBg, UPDATE_INTERVAL, watchedState);
+      setTimeout(updateFeeds, UPDATE_INTERVAL, watchedState);
     });
 };
 
 const changeLanguage = (event, watchedState) => {
   watchedState.ui.form.state = 'start';
-  watchedState.lng = event.target.dataset.lng;
+  watchedState.language = event.target.dataset.language;
 };
 
 const handlePostActions = (event, watchedState) => {
@@ -170,5 +170,5 @@ export {
   changeLanguage,
   handlePostActions,
   loadFeed,
-  updateFeedsBg,
+  updateFeeds,
 };
