@@ -83,7 +83,7 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
     id: feedId,
     url: feedUrl,
     title: feedData.title,
-    desc: feedData.description,
+    description: feedData.description,
   };
   const posts = feedData.items.map((post, index) => {
     const postId = watchedState.posts.length + index + 1;
