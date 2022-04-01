@@ -1,32 +1,28 @@
 import axios from 'axios';
-import { string } from 'yup';
+import { setLocale, string } from 'yup';
 import _ from 'lodash';
 
 const POST_ID_PREFIX = 'post_';
 const FEED_ID_PREFIX = 'feed_';
 const UPDATE_INTERVAL = 5000;
 
-const validateUrl = (watchedState, rawUrl) => {
-  if (rawUrl === '') {
-    const error = new Error('Should be not empty');
-    error.type = 'emptyUrl';
-    throw error;
-  }
-  const schema = string().url();
+const validateUrl = (rawUrl, feeds) => {
+  setLocale({
+    mixed: {
+      notOneOf: 'duplicateFeedUrl',
+      required: 'emptyUrl',
+    },
+    string: {
+      url: 'invalidFeedUrl',
+    },
+  });
+  const feedUrls = feeds.map((feed) => feed.url);
+  const schema = string().required().url().notOneOf(feedUrls);
   return schema.validate(rawUrl)
-    .catch(() => {
-      const error = new Error('URL must be valid');
-      error.type = 'invalidFeedUrl';
+    .catch((error) => {
+      error.process = 'formValidation';
+      error.type = error.message;
       throw error;
-    })
-    .then((cleanUrl) => {
-      const feedUrls = watchedState.feeds.map((feed) => feed.url);
-      if (feedUrls.includes(cleanUrl)) {
-        const error = new Error('RSS exists already');
-        error.type = 'duplicateFeedUrl';
-        throw error;
-      }
-      return cleanUrl;
     });
 };
 
@@ -42,8 +38,8 @@ const downloadXml = (url) => {
   const proxiedUrl = generateProxiedUrl(url);
   return axios.get(proxiedUrl.href)
     .then((response) => response.data.contents)
-    .catch(() => {
-      const error = new Error('Network error');
+    .catch((error) => {
+      error.process = 'feedLoading';
       error.type = 'networkError';
       throw error;
     });
@@ -61,6 +57,7 @@ const parseXml = (content) => {
   const errorElement = doc.querySelector('parsererror');
   if (errorElement) {
     const error = new Error('Invalid RSS structure');
+    error.process = 'feedLoading';
     error.type = 'invalidFeedXml';
     throw error;
   }
@@ -101,18 +98,37 @@ const loadFeed = (event, watchedState) => {
   event.preventDefault();
   const data = new FormData(event.target);
   const feedUrl = data.get('feed-url').trim();
-  watchedState.ui.form.state = 'processing';
-  validateUrl(watchedState, feedUrl)
+  watchedState.formValidation.status = 'validation';
+  validateUrl(feedUrl, watchedState.feeds)
+    .then(() => {
+      watchedState.formValidation.isValid = true;
+      watchedState.formValidation.error = null;
+      watchedState.formValidation.status = 'idle';
+      watchedState.feedLoading.status = 'loading';
+    })
     .then(() => downloadXml(feedUrl))
     .then((content) => parseXml(content))
     .then((feedData) => saveFeed(watchedState, feedUrl, feedData))
     .then(() => {
-      watchedState.ui.form.error = null;
-      watchedState.ui.form.state = 'success';
+      watchedState.feedLoading.error = null;
+      watchedState.feedLoading.status = 'success';
     })
     .catch((error) => {
-      watchedState.ui.form.error = error.type;
-      watchedState.ui.form.state = 'error';
+      switch (error.process) {
+        case 'formValidation': {
+          watchedState.formValidation.isValid = false;
+          watchedState.formValidation.error = error.type;
+          watchedState.formValidation.status = 'error';
+          break;
+        }
+        case 'feedLoading': {
+          watchedState.feedLoading.error = error.type;
+          watchedState.feedLoading.status = 'error';
+          break;
+        }
+        default:
+          throw new Error(`Error handling untracked process: ${error.process}`);
+      }
     });
 };
 
@@ -132,34 +148,38 @@ const updateSavedFeed = (watchedState, savedFeed, newFeedData) => {
   }
 };
 
-const updateFeeds = (watchedState) => {
-  const updateFeed = (feed) => {
-    downloadXml(feed.url)
-      .then((content) => parseXml(content))
-      .then((feedData) => updateSavedFeed(watchedState, feed, feedData))
-      .catch((error) => {
-        watchedState.ui.form.error = error.type;
-        watchedState.ui.form.state = 'error';
-      });
-  };
+const updateFeed = (watchedState, feed) => (
+  downloadXml(feed.url)
+    .then((content) => parseXml(content))
+    .then((feedData) => updateSavedFeed(watchedState, feed, feedData))
+    .catch((error) => {
+      watchedState.feedLoading.error = error.type;
+      watchedState.feedLoading.status = 'error';
+    })
+);
 
-  Promise.all(watchedState.feeds.map(updateFeed))
+const updateFeeds = (watchedState) => {
+  Promise.all(watchedState.feeds.map((feed) => updateFeed(watchedState, feed)))
+    .then(() => {
+      watchedState.feedLoading.error = null;
+      watchedState.feedLoading.status = 'idle';
+    })
     .finally(() => {
       setTimeout(updateFeeds, UPDATE_INTERVAL, watchedState);
     });
 };
 
 const changeLanguage = (event, watchedState) => {
-  watchedState.ui.form.state = 'start';
+  watchedState.formValidation.status = 'idle';
   watchedState.language = event.target.dataset.language;
 };
 
 const handlePostActions = (event, watchedState) => {
   const { postId } = event.target.dataset;
-  watchedState.postReadIds.push(postId);
+  watchedState.ui.postReadIds.push(postId);
 
   if (event.target.tagName === 'BUTTON') {
-    watchedState.ui.modal.loadedPostId = postId;
+    watchedState.modal.loadedPostId = postId;
   }
 };
 

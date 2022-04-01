@@ -1,61 +1,87 @@
-const renderForm = (i18, formState) => {
+const renderIdleStatus = (uiElements) => {
+  uiElements.input.removeAttribute('readonly');
+  uiElements.input.focus();
+  uiElements.button.disabled = false;
+  uiElements.spinner.classList.add('d-none');
+};
+
+const renderProcessingStatus = (uiElements) => {
+  uiElements.feedback.textContent = '';
+  uiElements.button.disabled = true;
+  uiElements.input.setAttribute('readonly', 'true');
+  uiElements.spinner.classList.remove('d-none');
+};
+
+const renderErrorStatus = (uiElements, errorMessage) => {
+  uiElements.feedback.classList.remove('text-success');
+  uiElements.feedback.classList.add('text-danger');
+  uiElements.feedback.textContent = errorMessage;
+  uiElements.input.removeAttribute('readonly');
+  uiElements.button.disabled = false;
+  uiElements.spinner.classList.add('d-none');
+};
+
+const renderSuccessStatus = (uiElements, successMessage) => {
+  uiElements.feedback.classList.remove('text-danger');
+  uiElements.feedback.classList.add('text-success');
+  uiElements.feedback.textContent = successMessage;
+  uiElements.input.value = '';
+  uiElements.input.removeAttribute('readonly');
+  uiElements.input.focus();
+  uiElements.button.disabled = false;
+  uiElements.spinner.classList.add('d-none');
+};
+
+const renderFormValidationProcess = (i18, formValidationState, uiElements) => {
   const textElements = document.querySelectorAll('[data-text]');
   textElements.forEach((element) => {
     element.textContent = i18.t(element.dataset.text);
   });
 
-  const form = document.querySelector('form');
-  const input = form.querySelector('#feed-url');
-  const button = form.querySelector('button');
-  const feedback = document.querySelector('#feedback');
-  const spinner = document.querySelector('#spinner');
-
-  switch (formState.state) {
-    case 'start': {
-      input.classList.remove('is-invalid');
-      feedback.classList.remove('text-success', 'text-danger');
-      feedback.textContent = '';
-      input.value = '';
-      input.removeAttribute('readonly');
-      input.focus();
-      button.disabled = false;
-      spinner.classList.add('d-none');
+  switch (formValidationState.status) {
+    case 'idle': {
+      renderIdleStatus(uiElements);
+      uiElements.input.classList.remove('is-invalid');
       break;
     }
-    case 'processing': {
-      button.disabled = true;
-      input.setAttribute('readonly', 'true');
-      spinner.classList.remove('d-none');
+    case 'validation': {
+      renderProcessingStatus(uiElements);
       break;
     }
     case 'error': {
-      input.classList.add('is-invalid');
-      feedback.classList.remove('text-success');
-      feedback.classList.add('text-danger');
-      feedback.textContent = i18.t(`form.errors.${formState.error}`);
-      input.removeAttribute('readonly');
-      button.disabled = false;
-      spinner.classList.add('d-none');
-      break;
-    }
-    case 'success': {
-      input.classList.remove('is-invalid');
-      feedback.classList.remove('text-danger');
-      feedback.classList.add('text-success');
-      feedback.textContent = i18.t('form.success');
-      input.value = '';
-      input.removeAttribute('readonly');
-      input.focus();
-      button.disabled = false;
-      spinner.classList.add('d-none');
+      uiElements.input.classList.add('is-invalid');
+      renderErrorStatus(uiElements, i18.t(`errors.${formValidationState.error}`));
       break;
     }
     default:
-      throw new Error(`Untracked UI state: ${formState.state}`);
+      throw new Error(`Untracked formValidation status: ${formValidationState.status}`);
   }
 };
 
-const renderFeeds = (i18, feeds) => {
+const renderFeedLoadingProcess = (i18, feedLoadingState, uiElements) => {
+  switch (feedLoadingState.status) {
+    case 'idle': {
+      renderIdleStatus(uiElements);
+      break;
+    }
+    case 'loading': {
+      renderProcessingStatus(uiElements);
+      break;
+    }
+    case 'error': {
+      renderErrorStatus(uiElements, i18.t(`errors.${feedLoadingState.error}`));
+      break;
+    }
+    case 'success': {
+      renderSuccessStatus(uiElements, i18.t('success'));
+      break;
+    }
+    default:
+      throw new Error(`Untracked feedLoading status: ${feedLoadingState.status}`);
+  }
+};
+
+const renderFeeds = (i18, state) => {
   const container = document.querySelector('#feeds');
 
   const card = document.createElement('div');
@@ -68,7 +94,7 @@ const renderFeeds = (i18, feeds) => {
 
   const feedsList = document.createElement('ul');
   feedsList.classList.add('list-group', 'list-group-flush');
-  feeds.forEach((feed) => {
+  state.feeds.forEach((feed) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'py-2');
 
@@ -107,7 +133,7 @@ const renderPosts = (i18, state) => {
 
     const a = document.createElement('a');
     a.classList.add('m-0');
-    if (state.postReadIds.includes(post.id)) {
+    if (state.ui.postReadIds.includes(post.id)) {
       a.classList.add('fw-normal', 'link-secondary');
     } else {
       a.classList.add('fw-bold');
@@ -135,7 +161,7 @@ const renderPosts = (i18, state) => {
 };
 
 const prepareModal = (i18, state) => {
-  const postId = state.ui.modal.loadedPostId;
+  const postId = state.modal.loadedPostId;
   const post = state.posts.find((element) => element.id === postId);
 
   const modal = document.querySelector('#modal');
@@ -154,8 +180,9 @@ const prepareModal = (i18, state) => {
 };
 
 export {
-  renderForm,
-  renderFeeds,
-  renderPosts,
   prepareModal,
+  renderFeedLoadingProcess,
+  renderFeeds,
+  renderFormValidationProcess,
+  renderPosts,
 };

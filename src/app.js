@@ -12,13 +12,22 @@ import {
 } from './controller.js';
 import {
   prepareModal,
+  renderFeedLoadingProcess,
   renderFeeds,
-  renderForm,
+  renderFormValidationProcess,
   renderPosts,
 } from './render.js';
 
 const app = () => {
   const defaultLanguage = 'ru';
+
+  const form = document.querySelector('form');
+  const uiElements = {
+    input: form.querySelector('#feed-url'),
+    button: form.querySelector('button'),
+    feedback: document.querySelector('#feedback'),
+    spinner: document.querySelector('#spinner'),
+  };
 
   const i18 = i18next.createInstance();
   i18.init({
@@ -28,17 +37,22 @@ const app = () => {
     .then(() => {
       const state = {
         language: defaultLanguage,
+        formValidation: {
+          status: 'idle',
+          isValid: true,
+          error: null,
+        },
+        feedLoading: {
+          status: 'idle',
+          error: null,
+        },
         feeds: [],
         posts: [],
-        postReadIds: [],
+        modal: {
+          loadedPostId: null,
+        },
         ui: {
-          form: {
-            state: 'start',
-            error: null,
-          },
-          modal: {
-            loadedPostId: null,
-          },
+          postReadIds: [],
         },
       };
       const watchedState = onChange(state, (path, value) => {
@@ -46,24 +60,28 @@ const app = () => {
           case 'language': {
             i18.changeLanguage(value)
               .then(() => {
-                renderForm(i18, state.ui.form);
+                renderFormValidationProcess(i18, state.formValidation, uiElements);
               });
             break;
           }
+          case 'formValidation.status': {
+            renderFormValidationProcess(i18, state.formValidation, uiElements);
+            break;
+          }
+          case 'feedLoading.status': {
+            renderFeedLoadingProcess(i18, state.feedLoading, uiElements);
+            break;
+          }
           case 'feeds': {
-            renderFeeds(i18, state.feeds);
+            renderFeeds(i18, state);
             break;
           }
           case 'posts':
-          case 'postReadIds': {
+          case 'ui.postReadIds': {
             renderPosts(i18, state);
             break;
           }
-          case 'ui.form.state': {
-            renderForm(i18, state.ui.form);
-            break;
-          }
-          case 'ui.modal.loadedPostId': {
+          case 'modal.loadedPostId': {
             prepareModal(i18, state);
             break;
           }
@@ -71,7 +89,6 @@ const app = () => {
         }
       });
 
-      const form = document.querySelector('form');
       form.addEventListener('submit', (event) => {
         loadFeed(event, watchedState);
       });
@@ -88,7 +105,7 @@ const app = () => {
 
       updateFeeds(watchedState);
 
-      renderForm(i18, state.ui.form);
+      renderFormValidationProcess(i18, state.formValidation, uiElements);
     });
 };
 
