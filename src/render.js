@@ -22,14 +22,11 @@ const renderErrorStatus = (uiElements, errorMessage) => {
 };
 
 const renderSuccessStatus = (uiElements, successMessage) => {
+  renderIdleStatus(uiElements);
   uiElements.feedback.classList.remove('text-danger');
   uiElements.feedback.classList.add('text-success');
   uiElements.feedback.textContent = successMessage;
   uiElements.input.value = '';
-  uiElements.input.removeAttribute('readonly');
-  uiElements.input.focus();
-  uiElements.button.disabled = false;
-  uiElements.spinner.classList.add('d-none');
 };
 
 const renderFormValidationProcess = (i18, formValidationState, uiElements) => {
