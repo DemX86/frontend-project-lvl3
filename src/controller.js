@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import { setLocale, string } from 'yup';
-import { uniqueId } from 'lodash';
+import uniqueId from 'lodash/uniqueId.js';
 
 const POST_ID_PREFIX = 'post_';
 const FEED_ID_PREFIX = 'feed_';
