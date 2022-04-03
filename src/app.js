@@ -5,7 +5,7 @@ import resources from './locales/index.js';
 import {
   addModalCloseEventHandlers,
   changeLanguage,
-  handlePostActions,
+  handleReadPost,
   loadFeed,
   updateFeeds,
 } from './controller.js';
@@ -95,7 +95,7 @@ const app = () => {
 
       const postsContainer = document.querySelector('#posts');
       postsContainer.addEventListener('click', (event) => {
-        handlePostActions(event, watchedState);
+        handleReadPost(event, watchedState);
       });
 
       addModalCloseEventHandlers(watchedState);

@@ -170,7 +170,7 @@ const changeLanguage = (event, watchedState) => {
   watchedState.language = event.target.dataset.language;
 };
 
-const handlePostActions = (event, watchedState) => {
+const handleReadPost = (event, watchedState) => {
   const { postId } = event.target.dataset;
   watchedState.ui.postReadIds.push(postId);
 
@@ -200,7 +200,7 @@ const addModalCloseEventHandlers = (watchedState) => {
 export {
   addModalCloseEventHandlers,
   changeLanguage,
-  handlePostActions,
+  handleReadPost,
   loadFeed,
   updateFeeds,
 };
