@@ -179,11 +179,30 @@ const handlePostActions = (event, watchedState) => {
   watchedState.ui.postReadIds.push(postId);
 
   if (event.target.tagName === 'BUTTON') {
-    watchedState.modal.loadedPostId = postId;
+    watchedState.modal.postId = postId;
+    watchedState.modal.isVisible = true;
   }
 };
 
+const addModalCloseEventHandlers = (watchedState) => {
+  const closeModal = () => {
+    watchedState.modal.postId = null;
+    watchedState.modal.isVisible = false;
+  };
+
+  const modal = document.querySelector('#modal');
+  const modalClose = modal.querySelector('#modal-close');
+  const modalCross = modal.querySelector('#modal-cross');
+
+  [modalClose, modalCross].forEach((element) => {
+    element.addEventListener('click', closeModal);
+  });
+
+  document.addEventListener('keydown', closeModal);
+};
+
 export {
+  addModalCloseEventHandlers,
   changeLanguage,
   handlePostActions,
   loadFeed,

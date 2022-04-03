@@ -145,8 +145,6 @@ const renderPosts = (i18, state) => {
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     button.textContent = i18.t('viewPostButton');
     button.dataset.text = 'viewPostButton';
-    button.dataset.bsToggle = 'modal';
-    button.dataset.bsTarget = '#modal';
     button.dataset.postId = post.id;
 
     li.append(a, button);
@@ -157,27 +155,55 @@ const renderPosts = (i18, state) => {
   container.replaceChildren(card);
 };
 
-const prepareModal = (i18, state) => {
-  const postId = state.modal.loadedPostId;
-  const post = state.posts.find((element) => element.id === postId);
-
+const renderModal = (i18, state) => {
+  const body = document.querySelector('body');
   const modal = document.querySelector('#modal');
-  const modalTitle = modal.querySelector('#modal-title');
-  const modalBody = modal.querySelector('#modal-body');
-  const modalRead = modal.querySelector('#modal-read');
-  const modalClose = modal.querySelector('#modal-close');
 
-  modalTitle.textContent = post.title;
-  const p = document.createElement('p');
-  p.textContent = post.description;
-  modalBody.replaceChildren(p);
-  modalRead.textContent = i18.t('modal.read');
-  modalRead.href = post.link;
-  modalClose.textContent = i18.t('modal.close');
+  if (state.modal.isVisible) {
+    const post = state.posts.find((element) => element.id === state.modal.postId);
+
+    const modalTitle = modal.querySelector('#modal-title');
+    const modalBody = modal.querySelector('#modal-body');
+    const modalRead = modal.querySelector('#modal-read');
+    const modalClose = modal.querySelector('#modal-close');
+
+    modalTitle.textContent = post.title;
+    const p = document.createElement('p');
+    p.textContent = post.description;
+    modalBody.replaceChildren(p);
+    modalRead.textContent = i18.t('modal.read');
+    modalRead.href = post.link;
+    modalClose.textContent = i18.t('modal.close');
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'backdrop';
+    backdrop.classList.add('modal-backdrop', 'show');
+    body.append(backdrop);
+    body.classList.add('modal-open');
+    body.style.overflow = 'hidden';
+    body.style.paddingRight = '15px';
+
+    modal.classList.add('show');
+    modal.style.display = 'block';
+    modal.removeAttribute('aria-hidden');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('role', 'dialog');
+  } else {
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    modal.removeAttribute('aria-modal');
+    modal.removeAttribute('role');
+    modal.setAttribute('aria-hidden', 'true');
+
+    const backdrop = body.querySelector('#backdrop');
+    backdrop.remove();
+    body.classList.remove('modal-open');
+    body.removeAttribute('style');
+  }
 };
 
 export {
-  prepareModal,
+  renderModal,
   renderFeedLoadingProcess,
   renderFeeds,
   renderFormValidationProcess,

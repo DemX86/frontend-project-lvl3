@@ -1,17 +1,16 @@
-import 'bootstrap';
-
 import i18next from 'i18next';
 import onChange from 'on-change';
 
 import resources from './locales/index.js';
 import {
+  addModalCloseEventHandlers,
   changeLanguage,
   handlePostActions,
   loadFeed,
   updateFeeds,
 } from './controller.js';
 import {
-  prepareModal,
+  renderModal,
   renderFeedLoadingProcess,
   renderFeeds,
   renderFormValidationProcess,
@@ -49,7 +48,8 @@ const app = () => {
         feeds: [],
         posts: [],
         modal: {
-          loadedPostId: null,
+          isVisible: false,
+          postId: null,
         },
         ui: {
           postReadIds: [],
@@ -81,8 +81,8 @@ const app = () => {
             renderPosts(i18, state);
             break;
           }
-          case 'modal.loadedPostId': {
-            prepareModal(i18, state);
+          case 'modal.isVisible': {
+            renderModal(i18, state);
             break;
           }
           // no default
@@ -97,6 +97,8 @@ const app = () => {
       postsContainer.addEventListener('click', (event) => {
         handlePostActions(event, watchedState);
       });
+
+      addModalCloseEventHandlers(watchedState);
 
       const languageSelector = document.querySelector('#language-selector');
       languageSelector.addEventListener('click', (event) => {
