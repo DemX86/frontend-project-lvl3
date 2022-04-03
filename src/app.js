@@ -90,19 +90,24 @@ const app = () => {
       });
 
       form.addEventListener('submit', (event) => {
-        loadFeed(event, watchedState);
+        event.preventDefault();
+        const formData = new FormData(form);
+        const feedUrl = formData.get('feed-url').trim();
+        loadFeed(watchedState, feedUrl);
       });
 
       const postsContainer = document.querySelector('#posts');
       postsContainer.addEventListener('click', (event) => {
-        handleReadPost(event, watchedState);
+        const postElement = event.target;
+        handleReadPost(watchedState, postElement);
       });
 
       addModalCloseEventHandlers(watchedState);
 
       const languageSelector = document.querySelector('#language-selector');
       languageSelector.addEventListener('click', (event) => {
-        changeLanguage(event, watchedState);
+        const { language } = event.event.target.dataset;
+        changeLanguage(watchedState, language);
       });
 
       updateFeeds(watchedState);

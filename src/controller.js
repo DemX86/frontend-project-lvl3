@@ -90,10 +90,7 @@ const saveFeed = (watchedState, feedUrl, feedData) => {
   watchedState.posts.push(...posts);
 };
 
-const loadFeed = (event, watchedState) => {
-  event.preventDefault();
-  const data = new FormData(event.target);
-  const feedUrl = data.get('feed-url').trim();
+const loadFeed = (watchedState, feedUrl) => {
   watchedState.formValidation.status = 'validation';
   validateUrl(feedUrl, watchedState.feeds)
     .then(() => {
@@ -165,16 +162,16 @@ const updateFeeds = (watchedState) => {
     });
 };
 
-const changeLanguage = (event, watchedState) => {
+const changeLanguage = (watchedState, language) => {
   watchedState.formValidation.status = 'idle';
-  watchedState.language = event.target.dataset.language;
+  watchedState.language = language;
 };
 
-const handleReadPost = (event, watchedState) => {
-  const { postId } = event.target.dataset;
+const handleReadPost = (watchedState, postElement) => {
+  const { postId } = postElement.dataset;
   watchedState.ui.postReadIds.push(postId);
 
-  if (event.target.tagName === 'BUTTON') {
+  if (postElement.tagName === 'BUTTON') {
     watchedState.modal.postId = postId;
     watchedState.modal.isVisible = true;
   }
