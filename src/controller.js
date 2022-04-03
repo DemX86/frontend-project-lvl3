@@ -1,3 +1,5 @@
+// noinspection CssInvalidHtmlTagReference
+
 import axios from 'axios';
 import { setLocale, string } from 'yup';
 import _ from 'lodash';
@@ -46,14 +48,8 @@ const downloadXml = (url) => {
 };
 
 const parseXml = (content) => {
-  const getElementText = (doc, tag) => {
-    const element = doc.querySelector(tag);
-    return element.textContent;
-  };
-
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/xml');
-  // noinspection CssInvalidHtmlTagReference
   const errorElement = doc.querySelector('parsererror');
   if (errorElement) {
     const error = new Error('Invalid RSS structure');
@@ -61,14 +57,14 @@ const parseXml = (content) => {
     error.type = 'invalidFeedXml';
     throw error;
   }
-  const title = getElementText(doc, 'channel title');
-  const description = getElementText(doc, 'channel description');
-  // noinspection CssInvalidHtmlTagReference
+
+  const title = doc.querySelector('channel title').textContent;
+  const description = doc.querySelector('channel description').textContent;
   const items = [...doc.querySelectorAll('item')]
     .map((item) => ({
-      title: getElementText(item, 'title'),
-      description: getElementText(item, 'description'),
-      link: getElementText(item, 'link'),
+      title: item.querySelector('title').textContent,
+      description: item.querySelector('description').textContent,
+      link: item.querySelector('link').textContent,
     }));
   return {
     title,
