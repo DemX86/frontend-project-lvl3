@@ -1,14 +1,14 @@
 const renderIdleStatus = (uiElements) => {
-  uiElements.input.removeAttribute('readonly');
-  uiElements.input.focus();
-  uiElements.button.disabled = false;
+  uiElements.formInput.removeAttribute('readonly');
+  uiElements.formInput.focus();
+  uiElements.formButton.disabled = false;
   uiElements.spinner.classList.add('d-none');
 };
 
 const renderProcessingStatus = (uiElements) => {
   uiElements.feedback.textContent = '';
-  uiElements.button.disabled = true;
-  uiElements.input.setAttribute('readonly', 'true');
+  uiElements.formButton.disabled = true;
+  uiElements.formInput.setAttribute('readonly', 'true');
   uiElements.spinner.classList.remove('d-none');
 };
 
@@ -16,8 +16,8 @@ const renderErrorStatus = (uiElements, errorMessage) => {
   uiElements.feedback.classList.remove('text-success');
   uiElements.feedback.classList.add('text-danger');
   uiElements.feedback.textContent = errorMessage;
-  uiElements.input.removeAttribute('readonly');
-  uiElements.button.disabled = false;
+  uiElements.formInput.removeAttribute('readonly');
+  uiElements.formButton.disabled = false;
   uiElements.spinner.classList.add('d-none');
 };
 
@@ -26,7 +26,7 @@ const renderSuccessStatus = (uiElements, successMessage) => {
   uiElements.feedback.classList.remove('text-danger');
   uiElements.feedback.classList.add('text-success');
   uiElements.feedback.textContent = successMessage;
-  uiElements.input.value = '';
+  uiElements.formInput.value = '';
 };
 
 const renderFormValidationProcess = (i18, formValidationState, uiElements) => {
@@ -38,7 +38,7 @@ const renderFormValidationProcess = (i18, formValidationState, uiElements) => {
   switch (formValidationState.status) {
     case 'idle': {
       renderIdleStatus(uiElements);
-      uiElements.input.classList.remove('is-invalid');
+      uiElements.formInput.classList.remove('is-invalid');
       break;
     }
     case 'validation': {
@@ -46,7 +46,7 @@ const renderFormValidationProcess = (i18, formValidationState, uiElements) => {
       break;
     }
     case 'error': {
-      uiElements.input.classList.add('is-invalid');
+      uiElements.formInput.classList.add('is-invalid');
       renderErrorStatus(uiElements, i18.t(`errors.${formValidationState.error}`));
       break;
     }

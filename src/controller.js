@@ -177,26 +177,14 @@ const handleReadPost = (watchedState, postElement) => {
   }
 };
 
-const addModalCloseEventHandlers = (watchedState) => {
-  const closeModal = () => {
-    watchedState.modal.postId = null;
-    watchedState.modal.isVisible = false;
-  };
-
-  const modal = document.querySelector('#modal');
-  const modalClose = modal.querySelector('#modal-close');
-  const modalCross = modal.querySelector('#modal-cross');
-
-  [modalClose, modalCross].forEach((element) => {
-    element.addEventListener('click', closeModal);
-  });
-
-  document.addEventListener('keydown', closeModal);
+const closeModal = (watchedState) => {
+  watchedState.modal.postId = null;
+  watchedState.modal.isVisible = false;
 };
 
 export {
-  addModalCloseEventHandlers,
   changeLanguage,
+  closeModal,
   handleReadPost,
   loadFeed,
   updateFeeds,

@@ -3,8 +3,8 @@ import onChange from 'on-change';
 
 import resources from './locales/index.js';
 import {
-  addModalCloseEventHandlers,
   changeLanguage,
+  closeModal,
   handleReadPost,
   loadFeed,
   updateFeeds,
@@ -20,12 +20,15 @@ import {
 const app = () => {
   const defaultLanguage = 'ru';
 
-  const form = document.querySelector('form');
   const uiElements = {
-    input: form.querySelector('#feed-url'),
-    button: form.querySelector('button'),
+    form: document.querySelector('form'),
+    formInput: document.querySelector('form #feed-url'),
+    formButton: document.querySelector('form button'),
     feedback: document.querySelector('#feedback'),
     spinner: document.querySelector('#spinner'),
+    postsContainer: document.querySelector('#posts'),
+    languageSelector: document.querySelector('#language-selector'),
+    modal: document.querySelector('#modal'),
   };
 
   const i18 = i18next.createInstance();
@@ -89,30 +92,37 @@ const app = () => {
         }
       });
 
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const formData = new FormData(form);
+      uiElements.form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(uiElements.form);
         const feedUrl = formData.get('feed-url').trim();
         loadFeed(watchedState, feedUrl);
       });
 
-      const postsContainer = document.querySelector('#posts');
-      postsContainer.addEventListener('click', (event) => {
-        const postElement = event.target;
+      uiElements.postsContainer.addEventListener('click', (e) => {
+        const postElement = e.target;
         handleReadPost(watchedState, postElement);
       });
 
-      addModalCloseEventHandlers(watchedState);
-
-      const languageSelector = document.querySelector('#language-selector');
-      languageSelector.addEventListener('click', (event) => {
-        const { language } = event.event.target.dataset;
+      uiElements.languageSelector.addEventListener('click', (e) => {
+        const { language } = e.target.dataset;
         changeLanguage(watchedState, language);
       });
 
-      updateFeeds(watchedState);
+      uiElements.modal.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-close')) {
+          closeModal(watchedState);
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && watchedState.modal.isVisible) {
+          closeModal(watchedState);
+        }
+      });
 
       renderFormValidationProcess(i18, state.formValidation, uiElements);
+
+      updateFeeds(watchedState);
     });
 };
 
