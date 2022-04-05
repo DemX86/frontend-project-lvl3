@@ -180,8 +180,6 @@ const renderModal = (i18, state) => {
     backdrop.classList.add('modal-backdrop', 'show');
     body.append(backdrop);
     body.classList.add('modal-open');
-    body.style.overflow = 'hidden';
-    body.style.paddingRight = '15px';
 
     modal.classList.add('show');
     modal.style.display = 'block';
@@ -198,7 +196,6 @@ const renderModal = (i18, state) => {
     const backdrop = body.querySelector('#backdrop');
     backdrop.remove();
     body.classList.remove('modal-open');
-    body.removeAttribute('style');
   }
 };
 
