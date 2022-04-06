@@ -78,9 +78,7 @@ const renderFeedLoadingProcess = (i18, feedLoadingState, uiElements) => {
   }
 };
 
-const renderFeeds = (i18, state) => {
-  const container = document.querySelector('#feeds');
-
+const renderFeeds = (i18, state, uiElements) => {
   const card = document.createElement('div');
   card.classList.add('card');
 
@@ -108,12 +106,10 @@ const renderFeeds = (i18, state) => {
   });
 
   card.append(h4, feedsList);
-  container.replaceChildren(card);
+  uiElements.feedsContainer.replaceChildren(card);
 };
 
-const renderPosts = (i18, state) => {
-  const container = document.querySelector('#posts');
-
+const renderPosts = (i18, state, uiElements) => {
   const card = document.createElement('div');
   card.classList.add('card');
 
@@ -152,28 +148,22 @@ const renderPosts = (i18, state) => {
   });
 
   card.append(h4, postsList);
-  container.replaceChildren(card);
+  uiElements.postsContainer.replaceChildren(card);
 };
 
-const renderModal = (i18, state) => {
-  const body = document.querySelector('body');
-  const modal = document.querySelector('#modal');
+const renderModal = (i18, state, uiElements) => {
+  const { body, modal } = uiElements;
 
   if (state.modal.isVisible) {
     const post = state.posts.find((element) => element.id === state.modal.postId);
 
-    const modalTitle = modal.querySelector('#modal-title');
-    const modalBody = modal.querySelector('#modal-body');
-    const modalRead = modal.querySelector('#modal-read');
-    const modalClose = modal.querySelector('#modal-close');
-
-    modalTitle.textContent = post.title;
+    uiElements.modalTitle.textContent = post.title;
     const p = document.createElement('p');
     p.textContent = post.description;
-    modalBody.replaceChildren(p);
-    modalRead.textContent = i18.t('modal.read');
-    modalRead.href = post.link;
-    modalClose.textContent = i18.t('modal.close');
+    uiElements.modalBody.replaceChildren(p);
+    uiElements.modalRead.textContent = i18.t('modal.read');
+    uiElements.modalRead.href = post.link;
+    uiElements.modalClose.textContent = i18.t('modal.close');
 
     const backdrop = document.createElement('div');
     backdrop.id = 'backdrop';

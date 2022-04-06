@@ -21,14 +21,20 @@ const app = () => {
   const defaultLanguage = 'ru';
 
   const uiElements = {
+    body: document.querySelector('body'),
     form: document.querySelector('form'),
     formInput: document.querySelector('form #feed-url'),
     formButton: document.querySelector('form button'),
     feedback: document.querySelector('#feedback'),
     spinner: document.querySelector('#spinner'),
+    feedsContainer: document.querySelector('#feeds'),
     postsContainer: document.querySelector('#posts'),
     languageSelector: document.querySelector('#language-selector'),
     modal: document.querySelector('#modal'),
+    modalTitle: document.querySelector('#modal-title'),
+    modalBody: document.querySelector('#modal-body'),
+    modalRead: document.querySelector('#modal-read'),
+    modalClose: document.querySelector('#modal-close'),
   };
 
   const i18 = i18next.createInstance();
@@ -76,16 +82,16 @@ const app = () => {
             break;
           }
           case 'feeds': {
-            renderFeeds(i18, state);
+            renderFeeds(i18, state, uiElements);
             break;
           }
           case 'posts':
           case 'ui.postReadIds': {
-            renderPosts(i18, state);
+            renderPosts(i18, state, uiElements);
             break;
           }
           case 'modal.isVisible': {
-            renderModal(i18, state);
+            renderModal(i18, state, uiElements);
             break;
           }
           // no default
